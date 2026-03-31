@@ -8,6 +8,8 @@
     <style>
         body { font-family: 'Outfit', sans-serif; }
         .card-shadow { box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1); }
+        /* Estilo para el efecto de desenfoque al abrir el modal */
+        .modal-active { overflow: hidden; }
     </style>
 </head>
 <body class="bg-slate-50 p-8">
@@ -19,7 +21,7 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div class="bg-white rounded-3xl p-5 border-2 border-blue-400 card-shadow scale-105">
+            <div class="bg-white rounded-3xl p-5 border-2 border-blue-400 card-shadow">
                 <div class="relative mb-4">
                     <img src="https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=300" class="rounded-2xl w-full h-40 object-cover">
                     <span class="absolute bottom-2 right-2 text-2xl">🧠</span>
@@ -29,13 +31,69 @@
                 <div class="bg-blue-500 text-white p-2 rounded-xl text-xs flex items-center gap-2 mb-4">
                     <span>🧠</span> Como el cerebro que piensa
                 </div>
-                <button class="w-full bg-blue-600 text-white py-2 rounded-xl font-bold">ⓘ Ver Detalles</button>
+                <button onclick="openModal()" class="w-full bg-blue-600 text-white py-2 rounded-xl font-bold hover:bg-blue-700 transition-colors">ⓘ Ver Detalles</button>
             </div>
-            </div>
+        </div>
 
         <div class="text-center mt-12">
             <a href="index.html" class="text-blue-600 font-bold hover:underline">← Volver al Menú Principal</a>
         </div>
     </div>
+
+    <div id="modalDetalles" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-[2rem] max-w-md w-full p-6 relative overflow-hidden">
+            
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-2xl font-bold">&times;</button>
+
+            <div class="text-center mb-6">
+                <h2 class="text-emerald-500 text-4xl font-bold">Tarjeta Madre</h2>
+                <p class="text-gray-500 text-lg">Motherboard</p>
+            </div>
+
+            <div class="bg-blue-600 rounded-3xl p-6 text-white text-center mb-4 shadow-lg">
+                <div class="text-3xl mb-2">🏠</div>
+                <h4 class="text-xl font-bold mb-2">Como una ciudad donde viven todos los componentes</h4>
+                <p class="text-sm opacity-90">Es la pieza más grande que conecta a todas las demás. ¡Como una ciudad donde viven todos los habitantes de la computadora!</p>
+            </div>
+
+            <div class="bg-blue-50 border border-blue-100 rounded-2xl p-4 mb-3 flex flex-col items-start">
+                <div class="flex items-center gap-2 mb-1">
+                    <span class="text-purple-400 text-xl">⚙️</span>
+                    <span class="text-blue-700 font-bold text-lg">Función</span>
+                </div>
+                <p class="text-gray-600">Conecta y comunica todos los componentes de la computadora</p>
+            </div>
+
+            <div class="bg-blue-50 border border-blue-100 rounded-2xl p-4 flex flex-col items-start">
+                <div class="flex items-center gap-2 mb-1">
+                    <span class="text-yellow-400 text-xl">⭐</span>
+                    <span class="text-blue-700 font-bold text-lg">Importancia</span>
+                </div>
+                <p class="text-gray-600">Es la base fundamental - sin ella nada funciona</p>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        const modal = document.getElementById('modalDetalles');
+
+        function openModal() {
+            modal.classList.remove('hidden');
+            document.body.classList.add('modal-active');
+        }
+
+        function closeModal() {
+            modal.classList.add('hidden');
+            document.body.classList.remove('modal-active');
+        }
+
+        // Cerrar el modal si se hace clic fuera de la caja blanca
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+    </script>
 </body>
 </html>
