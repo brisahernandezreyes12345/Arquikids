@@ -6,153 +6,315 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
     <style>
         body { font-family: 'Outfit', sans-serif; background-color: #f0f4f9; }
         .card-shadow { box-shadow: 0 8px 30px rgba(0,0,0,0.05); }
-        .component-btn { transition: all 0.2s; border: 2px solid transparent; }
+        .component-btn { transition: all 0.2s; border: 2px solid transparent; cursor: pointer; }
         .component-btn:hover { transform: scale(1.05); }
-        .component-active { border-color: #facc15; background-color: rgba(255,255,255,0.1); }
+        .component-active { border-color: #facc15 !important; background-color: rgba(255,255,255,0.2) !important; }
+        .component-done { opacity: 0.5; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .spinner { border:4px solid rgba(255,255,255,0.3); border-top-color:white; border-radius:50%; width:32px; height:32px; animation:spin 0.8s linear infinite; }
+        @keyframes popIn { 0%{transform:scale(0.5);opacity:0} 80%{transform:scale(1.1)} 100%{transform:scale(1);opacity:1} }
+        .pop-in { animation: popIn 0.4s ease forwards; }
     </style>
 </head>
 <body class="p-4 md:p-6">
 
+    <!-- Top bar -->
     <div class="max-w-[1400px] mx-auto mb-6 bg-white rounded-3xl p-3 flex items-center justify-between card-shadow border border-gray-100">
         <a href="menu.html" class="bg-blue-900 text-white px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2">
             ← Menú Principal
         </a>
-        
         <div class="flex items-center gap-2 text-blue-700 font-bold">
-            <span>🔧</span>
-            <span>Simulador de Ensamble</span>
+            <span>🔧</span><span>Simulador de Ensamble</span>
         </div>
-
         <div class="flex items-center gap-4">
-            <div class="bg-yellow-400 bg-opacity-20 text-yellow-600 px-4 py-1 rounded-full font-bold flex items-center gap-1">
+            <div id="pts-badge" class="bg-yellow-400 bg-opacity-20 text-yellow-600 px-4 py-1 rounded-full font-bold flex items-center gap-1">
                 ⭐ 0 pts
             </div>
             <div class="bg-blue-100 p-1 rounded-full border-2 border-white shadow-sm">
-                <img src="https://img.icons8.com/bubbles/100/000000/robot.png" class="w-10 h-10">
+                <img id="user-avatar" src="https://img.icons8.com/bubbles/100/000000/robot.png" class="w-10 h-10">
             </div>
         </div>
     </div>
 
     <div class="max-w-[1400px] mx-auto grid grid-cols-12 gap-6">
-        
+
+        <!-- Panel izquierdo -->
         <div class="col-span-12 lg:col-span-4 flex flex-col gap-6">
-            
+
+            <!-- Instrucción actual -->
             <div class="bg-blue-600 rounded-[2.5rem] p-8 text-white shadow-xl">
                 <div class="flex items-center gap-4 mb-6">
-                    <div class="bg-white text-blue-600 w-10 h-10 rounded-full flex items-center justify-center font-bold text-xl">2</div>
-                    <h2 class="text-2xl font-bold">Paso 2 de 4</h2>
+                    <div id="step-num" class="bg-white text-blue-600 w-10 h-10 rounded-full flex items-center justify-center font-bold text-xl">1</div>
+                    <h2 id="step-title" class="text-2xl font-bold">Paso 1 de...</h2>
                 </div>
                 <div class="bg-blue-500 bg-opacity-40 p-6 rounded-3xl mb-6">
-                    <p class="text-lg leading-snug">Ahora coloca el <b>Procesador (CPU)</b> en su ranura especial de la tarjeta madre.</p>
+                    <p id="step-desc" class="text-lg leading-snug">Cargando componentes...</p>
                 </div>
-                <div class="flex gap-2">
-                    <div class="h-2 flex-1 bg-green-400 rounded-full"></div>
-                    <div class="h-2 flex-1 bg-white rounded-full"></div>
-                    <div class="h-2 flex-1 bg-blue-400 opacity-30 rounded-full"></div>
-                    <div class="h-2 flex-1 bg-blue-400 opacity-30 rounded-full"></div>
-                </div>
+                <div id="step-progress" class="flex gap-2"></div>
             </div>
 
+            <!-- Lista de componentes -->
             <div class="bg-blue-500 rounded-[2.5rem] p-8 text-white shadow-xl">
                 <h3 class="text-center text-2xl font-bold mb-6">Componentes</h3>
-                <div class="grid grid-cols-2 gap-4">
-                    <button class="component-btn bg-white bg-opacity-10 p-4 rounded-2xl flex flex-col items-center opacity-50">
-                        <div class="h-16 flex items-center justify-center text-4xl">🏗️</div>
-                        <p class="text-xs font-bold mt-2">Tarjeta Madre</p>
-                    </button>
-                    <button class="component-btn bg-white bg-opacity-20 p-4 rounded-2xl flex flex-col items-center component-active">
-                        <div class="h-16 flex items-center justify-center text-4xl">🧠</div>
-                        <p class="text-xs font-bold mt-2">Procesador</p>
-                    </button>
-                    <button class="component-btn bg-white bg-opacity-10 p-4 rounded-2xl flex flex-col items-center opacity-50">
-                        <div class="h-16 flex items-center justify-center text-4xl">💾</div>
-                        <p class="text-xs font-bold mt-2">Memoria RAM</p>
-                    </button>
-                    <button class="component-btn bg-white bg-opacity-10 p-4 rounded-2xl flex flex-col items-center opacity-50">
-                        <div class="h-16 flex items-center justify-center text-4xl">🎨</div>
-                        <p class="text-xs font-bold mt-2">Tarjeta Gráfica</p>
-                    </button>
+                <div id="componentes-lista" class="grid grid-cols-2 gap-4">
+                    <div class="col-span-2 flex justify-center py-4"><div class="spinner"></div></div>
                 </div>
             </div>
         </div>
 
+        <!-- Panel derecho: área 3D -->
         <div class="col-span-12 lg:col-span-8 flex flex-col gap-4">
             <div class="flex justify-end gap-3">
-                <button class="bg-yellow-400 text-blue-900 px-6 py-2 rounded-xl font-bold shadow-md flex items-center gap-2">
+                <button id="btn-pista" class="bg-yellow-400 text-blue-900 px-6 py-2 rounded-xl font-bold shadow-md flex items-center gap-2 hover:bg-yellow-300 transition-colors">
                     💡 Ver Pista
                 </button>
-                <button onclick="location.reload()" class="bg-blue-900 text-white px-6 py-2 rounded-xl font-bold shadow-md flex items-center gap-2">
+                <button onclick="reiniciar()" class="bg-blue-900 text-white px-6 py-2 rounded-xl font-bold shadow-md flex items-center gap-2 hover:bg-blue-800 transition-colors">
                     🔄 Reiniciar
                 </button>
             </div>
 
-            <div class="bg-white rounded-[3rem] p-4 flex-1 shadow-2xl border-4 border-blue-50 flex flex-col">
+            <div class="bg-white rounded-[3rem] p-4 flex-1 shadow-2xl border-4 border-blue-50 flex flex-col" style="min-height:480px">
                 <h2 class="text-blue-700 text-3xl font-bold text-center py-4">Gabinete de la Computadora</h2>
                 <div id="canvas-3d" class="flex-1 bg-slate-50 rounded-[2.5rem] overflow-hidden relative">
                     <div class="absolute top-4 left-4 text-gray-300 text-xs font-bold pointer-events-none uppercase">Área de ensamble 3D</div>
                 </div>
             </div>
+
+            <!-- Feedback -->
+            <div id="feedback-box" class="hidden bg-green-100 border-2 border-green-400 text-green-700 rounded-2xl p-4 text-center font-bold text-lg pop-in"></div>
+        </div>
+    </div>
+
+    <!-- Modal completado -->
+    <div id="modal-completo" class="fixed inset-0 bg-black bg-opacity-60 hidden flex items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-[2rem] max-w-sm w-full p-8 text-center shadow-2xl pop-in">
+            <div class="text-7xl mb-4">🎉</div>
+            <h2 class="text-3xl font-bold text-blue-700 mb-2">¡Ensamble Completo!</h2>
+            <p id="modal-usuario" class="text-gray-500 mb-6"></p>
+            <div class="bg-yellow-50 rounded-2xl p-4 mb-6">
+                <p class="text-yellow-600 font-bold text-2xl">⭐ +<span id="puntos-ganados">50</span> puntos</p>
+            </div>
+            <div class="flex gap-3">
+                <button onclick="reiniciar()" class="flex-1 bg-blue-600 text-white py-3 rounded-xl font-bold hover:bg-blue-700">Jugar de nuevo</button>
+                <a href="menu.html" class="flex-1 bg-blue-100 text-blue-700 py-3 rounded-xl font-bold hover:bg-blue-200 flex items-center justify-center">Menú</a>
+            </div>
         </div>
     </div>
 
     <script>
-        // LÓGICA 3D (Three.js)
-        let scene, camera, renderer, controls;
+        // ── Sesión ─────────────────────────────────────────────────────────────
+        const usuarioData = localStorage.getItem('arquikids_usuario');
+        const usuario = usuarioData ? JSON.parse(usuarioData) : null;
+
+        if (usuario) {
+            document.getElementById('pts-badge').textContent = `⭐ ${usuario.puntosAcumulados} pts`;
+            if (usuario.avatar) document.getElementById('user-avatar').src = usuario.avatar;
+        }
+
+        // ── Estado del simulador ───────────────────────────────────────────────
+        let componentes = [];
+        let pasoActual = 0;
+        let ensamblados = [];
+        let meshes3D = {};
+
+        const EMOJIS = {
+            procesador: '🧠', ram: '💾', madre: '🏗️',
+            grafica: '🎨', disco: '💿', fuente: '⚡', default: '⚙️'
+        };
+
+        function getEmoji(nombre) {
+            const n = nombre.toLowerCase();
+            if (n.includes('procesador')||n.includes('cpu')||n.includes('intel')||n.includes('amd')) return EMOJIS.procesador;
+            if (n.includes('ram')||n.includes('memoria')) return EMOJIS.ram;
+            if (n.includes('madre')||n.includes('motherboard')) return EMOJIS.madre;
+            if (n.includes('grafica')||n.includes('gráfica')||n.includes('gpu')) return EMOJIS.grafica;
+            if (n.includes('disco')||n.includes('ssd')||n.includes('hdd')) return EMOJIS.disco;
+            if (n.includes('fuente')||n.includes('psu')) return EMOJIS.fuente;
+            return EMOJIS.default;
+        }
+
+        // ── Three.js ──────────────────────────────────────────────────────────
+        let scene, camera, renderer;
         const container = document.getElementById('canvas-3d');
 
         function init3D() {
             scene = new THREE.Scene();
             scene.background = new THREE.Color(0xf8fafc);
-            
+
             camera = new THREE.PerspectiveCamera(50, container.clientWidth / container.clientHeight, 0.1, 1000);
-            camera.position.set(2, 2, 4);
+            camera.position.set(3, 3, 5);
+            camera.lookAt(0, 0, 0);
 
             renderer = new THREE.WebGLRenderer({ antialias: true });
             renderer.setSize(container.clientWidth, container.clientHeight);
             container.appendChild(renderer.domElement);
 
-            controls = new THREE.OrbitControls(camera, renderer.domElement);
-            controls.enableDamping = true;
+            const amb = new THREE.AmbientLight(0xffffff, 0.8);
+            scene.add(amb);
+            const dir = new THREE.DirectionalLight(0xffffff, 0.6);
+            dir.position.set(5, 10, 5);
+            scene.add(dir);
 
-            // Luces
-            const light = new THREE.AmbientLight(0xffffff, 0.8);
-            scene.add(light);
-            const dirLight = new THREE.DirectionalLight(0xffffff, 0.5);
-            dirLight.position.set(5, 10, 5);
-            scene.add(dirLight);
+            // Gabinete base
+            const cabinetGeom = new THREE.BoxGeometry(4, 3, 2);
+            const cabinetMat = new THREE.MeshPhongMaterial({ color: 0x1e293b, transparent: true, opacity: 0.15, wireframe: false });
+            const cabinet = new THREE.Mesh(cabinetGeom, cabinetMat);
+            scene.add(cabinet);
+            const edges = new THREE.EdgesGeometry(cabinetGeom);
+            const lineMat = new THREE.LineBasicMaterial({ color: 0x3b82f6 });
+            scene.add(new THREE.LineSegments(edges, lineMat));
 
-            // OBJETOS (Prototipo 3D)
-            // Placa Base (Verde como en tu imagen)
-            const moboGeom = new THREE.BoxGeometry(3, 0.1, 2);
-            const moboMat = new THREE.MeshPhongMaterial({ color: 0x22c55e });
+            // Tarjeta madre siempre visible
+            const moboGeom = new THREE.BoxGeometry(2.5, 0.08, 1.5);
+            const moboMat = new THREE.MeshPhongMaterial({ color: 0x16a34a });
             const mobo = new THREE.Mesh(moboGeom, moboMat);
+            mobo.position.set(0, -0.5, 0);
             scene.add(mobo);
 
-            // CPU (Gris metálico)
-            const cpuGeom = new THREE.BoxGeometry(0.5, 0.15, 0.5);
-            const cpuMat = new THREE.MeshPhongMaterial({ color: 0x94a3b8 });
-            const cpu = new THREE.Mesh(cpuGeom, cpuMat);
-            cpu.position.y = 0.5; // Flotando para que el usuario lo vea
-            scene.add(cpu);
-
+            // Rotación suave
+            let angle = 0;
             function animate() {
                 requestAnimationFrame(animate);
-                controls.update();
+                angle += 0.005;
+                camera.position.x = Math.sin(angle) * 5.5;
+                camera.position.z = Math.cos(angle) * 5.5;
+                camera.lookAt(0, 0, 0);
                 renderer.render(scene, camera);
             }
             animate();
         }
 
-        window.addEventListener('load', init3D);
+        const COLORES_3D = [0x94a3b8, 0x22d3ee, 0xf59e0b, 0xa78bfa, 0xf87171, 0x34d399];
+        const POSICIONES_3D = [
+            {x: 0, y: 0.3, z: 0},
+            {x: 0.8, y: 0.2, z: 0.3},
+            {x: -0.8, y: 0.2, z: -0.3},
+            {x: 0.5, y: 0.5, z: -0.5},
+            {x: -0.5, y: 0.4, z: 0.5},
+            {x: 0, y: 0.7, z: 0},
+        ];
+
+        function agregarPieza3D(index) {
+            const geom = new THREE.BoxGeometry(0.45, 0.15, 0.45);
+            const mat = new THREE.MeshPhongMaterial({ color: COLORES_3D[index % COLORES_3D.length] });
+            const mesh = new THREE.Mesh(geom, mat);
+            const pos = POSICIONES_3D[index % POSICIONES_3D.length];
+            mesh.position.set(pos.x, pos.y, pos.z);
+            scene.add(mesh);
+            meshes3D[index] = mesh;
+        }
+
+        // ── Lógica del simulador ───────────────────────────────────────────────
+        function actualizarUI() {
+            const total = componentes.length;
+            if (total === 0) return;
+
+            if (pasoActual >= total) {
+                mostrarCompletado();
+                return;
+            }
+
+            const comp = componentes[pasoActual];
+            document.getElementById('step-num').textContent = pasoActual + 1;
+            document.getElementById('step-title').textContent = `Paso ${pasoActual + 1} de ${total}`;
+            document.getElementById('step-desc').innerHTML = `Coloca el <b>${comp.nombreTecnico}</b> en su lugar correcto.`;
+
+            // Barra de progreso
+            const bar = document.getElementById('step-progress');
+            bar.innerHTML = '';
+            componentes.forEach((_, i) => {
+                const seg = document.createElement('div');
+                seg.className = `h-2 flex-1 rounded-full ${i < pasoActual ? 'bg-green-400' : i === pasoActual ? 'bg-white' : 'bg-blue-400 opacity-30'}`;
+                bar.appendChild(seg);
+            });
+
+            // Botones de componentes
+            const lista = document.getElementById('componentes-lista');
+            lista.innerHTML = '';
+            componentes.forEach((c, i) => {
+                const btn = document.createElement('button');
+                const hecho = ensamblados.includes(i);
+                const esActivo = i === pasoActual;
+                btn.className = `component-btn bg-white bg-opacity-10 p-4 rounded-2xl flex flex-col items-center ${hecho ? 'component-done' : ''} ${esActivo ? 'component-active' : ''}`;
+                btn.disabled = hecho;
+                btn.innerHTML = `<div class="h-16 flex items-center justify-center text-4xl">${getEmoji(c.nombreTecnico)}</div>
+                    <p class="text-xs font-bold mt-2">${c.nombreTecnico}</p>
+                    ${hecho ? '<p class="text-green-300 text-xs">✓ Instalado</p>' : ''}`;
+                if (esActivo && !hecho) {
+                    btn.onclick = () => instalarComponente(i);
+                }
+                lista.appendChild(btn);
+            });
+        }
+
+        function instalarComponente(index) {
+            if (ensamblados.includes(index)) return;
+            ensamblados.push(index);
+            agregarPieza3D(index);
+
+            const comp = componentes[index];
+            const feedback = document.getElementById('feedback-box');
+            feedback.textContent = `¡Perfecto! ${comp.nombreTecnico} instalado correctamente 🎉`;
+            feedback.classList.remove('hidden');
+            feedback.classList.add('pop-in');
+            setTimeout(() => {
+                feedback.classList.add('hidden');
+                feedback.classList.remove('pop-in');
+            }, 2500);
+
+            pasoActual = index + 1;
+            actualizarUI();
+        }
+
+        function mostrarCompletado() {
+            const pts = componentes.length * 50;
+            document.getElementById('puntos-ganados').textContent = pts;
+            document.getElementById('modal-usuario').textContent = usuario ? `¡Muy bien, ${usuario.nickname}!` : '¡Muy bien!';
+            document.getElementById('modal-completo').classList.remove('hidden');
+        }
+
+        function reiniciar() {
+            pasoActual = 0;
+            ensamblados = [];
+            Object.values(meshes3D).forEach(m => scene.remove(m));
+            meshes3D = {};
+            document.getElementById('modal-completo').classList.add('hidden');
+            actualizarUI();
+        }
+
+        document.getElementById('btn-pista').onclick = () => {
+            if (pasoActual < componentes.length) {
+                const c = componentes[pasoActual];
+                alert(`💡 Pista: ${c.analogiaCotidiana || 'Busca el lugar correcto en la tarjeta madre.'}`);
+            }
+        };
+
         window.addEventListener('resize', () => {
+            if (!renderer) return;
             camera.aspect = container.clientWidth / container.clientHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(container.clientWidth, container.clientHeight);
         });
+
+        // ── Iniciar ────────────────────────────────────────────────────────────
+        async function iniciar() {
+            init3D();
+            try {
+                const res = await fetch('/api/componentes');
+                if (!res.ok) throw new Error(`Error HTTP ${res.status}`);
+                componentes = await res.json();
+                actualizarUI();
+            } catch(err) {
+                document.getElementById('componentes-lista').innerHTML =
+                    `<div class="col-span-2 text-center text-white text-sm">⚠️ ${err.message}</div>`;
+                document.getElementById('step-desc').textContent = 'Error al cargar componentes.';
+            }
+        }
+
+        window.addEventListener('load', iniciar);
     </script>
 </body>
 </html>
