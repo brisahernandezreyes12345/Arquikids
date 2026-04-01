@@ -15,9 +15,8 @@
             background: linear-gradient(to right, #3b82f6, #2563eb);
         }
         .card-shadow { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
-        /* Animación suave para la selección de avatar */
         .avatar-selected {
-            background-color: #dbeafe; /* blue-100 */
+            background-color: #dbeafe; 
             border: 3px solid #3b82f6;
             transform: scale(1.1);
         }
@@ -39,72 +38,47 @@
         <p class="text-xl opacity-90">¿Quién va a jugar hoy? 😊</p>
     </div>
 
-    <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <div id="contenedor-perfiles" class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         
         <div class="bg-white rounded-[2rem] p-6 card-shadow flex flex-col items-center">
             <img src="https://img.icons8.com/bubbles/200/robot-vacuum.png" class="w-32 h-32 mb-2">
             <h2 class="text-2xl font-bold text-gray-800">Brisa</h2>
-            <p class="text-yellow-500 font-bold mb-4 flex items-center gap-1">⭐ 0 puntos</p>
-            
+            <p id="puntos-Brisa" class="text-yellow-500 font-bold mb-4 flex items-center gap-1">⭐ 0 puntos</p>
             <div class="grid grid-cols-2 gap-2 w-full mb-6">
                 <div class="bg-blue-50 p-2 rounded-xl text-center">
-                    <p class="text-xs font-bold text-gray-400">0</p>
+                    <p id="ensambles-Brisa" class="text-xs font-bold text-gray-400">0</p>
                     <p class="text-[10px] text-gray-500 uppercase">Ensambles</p>
                 </div>
                 <div class="bg-blue-50 p-2 rounded-xl text-center">
-                    <p class="text-xs font-bold text-gray-400">0</p>
+                    <p id="logros-Brisa" class="text-xs font-bold text-gray-400">0</p>
                     <p class="text-[10px] text-gray-500 uppercase">Logros</p>
                 </div>
             </div>
-            
-            <div class="flex gap-2 w-full">
-                <a href="menu.html" class="flex-1 btn-play-gradient text-white py-3 rounded-xl font-bold flex items-center justify-center gap-2 hover:opacity-90">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                    </svg>
-                    Jugar
-                </a>
-                <button class="bg-red-500 p-3 rounded-xl text-white hover:bg-red-600">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                    </svg>
-                </button>
-            </div>
+            <button onclick="seleccionarPerfil('Brisa', 'https://img.icons8.com/bubbles/200/robot-vacuum.png')" class="w-full btn-play-gradient text-white py-3 rounded-xl font-bold flex items-center justify-center gap-2 hover:opacity-90">
+                Jugar
+            </button>
         </div>
 
         <div class="bg-white rounded-[2rem] p-6 card-shadow flex flex-col items-center">
             <img src="https://img.icons8.com/bubbles/200/skull.png" class="w-32 h-32 mb-2">
             <h2 class="text-2xl font-bold text-gray-800">Luis</h2>
-            <p class="text-yellow-500 font-bold mb-4 flex items-center gap-1">⭐ 0 puntos</p>
-            
+            <p id="puntos-Luis" class="text-yellow-500 font-bold mb-4 flex items-center gap-1">⭐ 0 puntos</p>
             <div class="grid grid-cols-2 gap-2 w-full mb-6">
                 <div class="bg-blue-50 p-2 rounded-xl text-center">
-                    <p class="text-xs font-bold text-gray-400">0</p>
+                    <p id="ensambles-Luis" class="text-xs font-bold text-gray-400">0</p>
                     <p class="text-[10px] text-gray-500 uppercase">Ensambles</p>
                 </div>
                 <div class="bg-blue-50 p-2 rounded-xl text-center">
-                    <p class="text-xs font-bold text-gray-400">0</p>
+                    <p id="logros-Luis" class="text-xs font-bold text-gray-400">0</p>
                     <p class="text-[10px] text-gray-500 uppercase">Logros</p>
                 </div>
             </div>
-            
-            <div class="flex gap-2 w-full">
-                <a href="menu.html" class="flex-1 btn-play-gradient text-white py-3 rounded-xl font-bold flex items-center justify-center gap-2 hover:opacity-90">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                    </svg>
-                    Jugar
-                </a>
-                <button class="bg-red-500 p-3 rounded-xl text-white hover:bg-red-600">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                    </svg>
-                </button>
-            </div>
+            <button onclick="seleccionarPerfil('Luis', 'https://img.icons8.com/bubbles/200/skull.png')" class="w-full btn-play-gradient text-white py-3 rounded-xl font-bold flex items-center justify-center gap-2 hover:opacity-90">
+                Jugar
+            </button>
         </div>
 
         <div id="new-profile-card" class="bg-white bg-opacity-20 border-4 border-dashed border-white rounded-[2rem] p-6 flex flex-col items-center justify-center cursor-pointer transition-all duration-300 min-h-[350px]">
-            
             <div id="plus-content" onclick="abrirFormulario()" class="flex flex-col items-center w-full">
                 <span class="text-8xl text-white font-light mb-4">+</span>
                 <p class="text-white text-2xl font-bold">Nuevo Perfil</p>
@@ -113,7 +87,6 @@
             <div id="form-content" class="hidden w-full">
                 <h3 class="text-blue-700 text-xl font-bold text-center mb-4">Crear Nuevo Perfil</h3>
                 <input type="text" id="nickname" placeholder="Tu nombre" class="w-full p-3 bg-blue-50 border border-blue-200 rounded-xl mb-4 text-gray-700 outline-none focus:ring-2 focus:ring-blue-400">
-                
                 <p class="text-blue-700 text-sm font-bold mb-2 text-center">Elige tu avatar:</p>
                 <div class="grid grid-cols-4 gap-2 mb-6">
                     <img onclick="selectAvatar(this)" src="img/mapache.png" class="w-full aspect-square cursor-pointer rounded-lg hover:bg-blue-100 transition-all p-1">
@@ -125,13 +98,11 @@
                     <img onclick="selectAvatar(this)" src="https://img.icons8.com/bubbles/100/unicorn.png" class="w-full aspect-square cursor-pointer rounded-lg hover:bg-blue-100 transition-all p-1">
                     <img onclick="selectAvatar(this)" src="https://img.icons8.com/bubbles/100/wizard.png" class="w-full aspect-square cursor-pointer rounded-lg hover:bg-blue-100 transition-all p-1">
                 </div>
-
                 <div class="flex gap-2">
                     <button onclick="crearPerfil()" class="flex-1 bg-blue-600 text-white py-2 rounded-xl font-bold hover:bg-blue-700">Crear</button>
                     <button onclick="cerrarFormulario()" class="flex-1 bg-white border border-gray-200 text-gray-500 py-2 rounded-xl font-bold hover:bg-gray-50">Cancelar</button>
                 </div>
             </div>
-
         </div>
     </div>
 
@@ -139,10 +110,22 @@
         let avatarElegido = null;
         const card = document.getElementById('new-profile-card');
 
+        window.addEventListener('load', () => {
+            const nombres = ['Brisa', 'Luis'];
+            nombres.forEach(nombre => {
+                const guardado = localStorage.getItem(`perfil_${nombre}`);
+                if (guardado) {
+                    const data = JSON.parse(guardado);
+                    document.getElementById(`puntos-${nombre}`).innerHTML = `⭐ ${data.puntos} puntos`;
+                    document.getElementById(`ensambles-${nombre}`).innerText = data.ensambles;
+                    document.getElementById(`logros-${nombre}`).innerText = data.logros;
+                }
+            });
+        });
+
         function abrirFormulario() {
             document.getElementById('plus-content').classList.add('hidden');
             document.getElementById('form-content').classList.remove('hidden');
-            // Cambiamos la tarjeta a blanca y sólida
             card.classList.remove('bg-opacity-20', 'border-dashed', 'border-white', 'cursor-pointer');
             card.classList.add('bg-opacity-100', 'card-shadow');
         }
@@ -150,28 +133,39 @@
         function cerrarFormulario() {
             document.getElementById('form-content').classList.add('hidden');
             document.getElementById('plus-content').classList.remove('hidden');
-            // Devolvemos la tarjeta a su estado transparente
             card.classList.add('bg-opacity-20', 'border-dashed', 'border-white', 'cursor-pointer');
             card.classList.remove('bg-opacity-100', 'card-shadow');
             avatarElegido = null;
         }
 
         function selectAvatar(el) {
-            // Quitamos la clase de selección de todos los demás
-            document.querySelectorAll('#form-content img').forEach(img => {
-                img.classList.remove('avatar-selected');
-            });
-            // Añadimos la clase al seleccionado
+            document.querySelectorAll('#form-content img').forEach(img => img.classList.remove('avatar-selected'));
             el.classList.add('avatar-selected');
             avatarElegido = el.src;
         }
 
-        
+        function seleccionarPerfil(nombre, avatar) {
+            let perfilData = localStorage.getItem(`perfil_${nombre}`);
+            if (!perfilData) {
+                perfilData = {
+                    nombre: nombre,
+                    avatar: avatar,
+                    puntos: 0,
+                    ensambles: 0,
+                    logros: 0,
+                    mejorTiempo: "--"
+                };
+                localStorage.setItem(`perfil_${nombre}`, JSON.stringify(perfilData));
+            } else {
+                perfilData = JSON.parse(perfilData);
+            }
+            localStorage.setItem('perfilActivo', JSON.stringify(perfilData));
+            window.location.href = "menu.html";
+        }
+
         function crearPerfil() {
-            const nombre = document.getElementById('nickname').value;
-            
+            const nombre = document.getElementById('nickname').value.trim();
             if (nombre && avatarElegido) {
-                // Creamos un objeto con toda la información inicial
                 const datosUsuario = {
                     nombre: nombre,
                     avatar: avatarElegido,
@@ -180,18 +174,13 @@
                     logros: 0,
                     mejorTiempo: "--"
                 };
-
-                // Lo guardamos en el localStorage convertido a texto (JSON)
+                localStorage.setItem(`perfil_${nombre}`, JSON.stringify(datosUsuario));
                 localStorage.setItem('perfilActivo', JSON.stringify(datosUsuario));
-                
-                // Redirigimos al menú
                 window.location.href = "menu.html"; 
             } else {
                 alert("¡No olvides tu nombre y elegir un avatar! 😊");
             }
         }
-        
     </script>
-
 </body>
 </html>

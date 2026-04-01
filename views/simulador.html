@@ -38,9 +38,7 @@
     </div>
 
     <div class="max-w-[1400px] mx-auto grid grid-cols-12 gap-6">
-        
         <div class="col-span-12 lg:col-span-4 flex flex-col gap-6">
-            
             <div class="bg-blue-600 rounded-[2.5rem] p-8 text-white shadow-xl">
                 <div class="flex items-center gap-4 mb-6">
                     <div class="bg-white text-blue-600 w-10 h-10 rounded-full flex items-center justify-center font-bold text-xl">2</div>
@@ -82,12 +80,9 @@
 
         <div class="col-span-12 lg:col-span-8 flex flex-col gap-4">
             <div class="flex justify-end gap-3">
-                <button class="bg-yellow-400 text-blue-900 px-6 py-2 rounded-xl font-bold shadow-md flex items-center gap-2">
-                    💡 Ver Pista
-                </button>
-                <button onclick="location.reload()" class="bg-blue-900 text-white px-6 py-2 rounded-xl font-bold shadow-md flex items-center gap-2">
-                    🔄 Reiniciar
-                </button>
+                <button class="bg-yellow-400 text-blue-900 px-6 py-2 rounded-xl font-bold shadow-md flex items-center gap-2">💡 Ver Pista</button>
+                <button onclick="location.reload()" class="bg-blue-900 text-white px-6 py-2 rounded-xl font-bold shadow-md flex items-center gap-2">🔄 Reiniciar</button>
+                <button onclick="guardarAvance(100)" class="bg-green-500 text-white px-6 py-2 rounded-xl font-bold shadow-md flex items-center gap-2 hover:bg-green-600 transition-all transform hover:scale-105">💾 Guardar Avance</button>
             </div>
 
             <div class="bg-white rounded-[3rem] p-4 flex-1 shadow-2xl border-4 border-blue-50 flex flex-col">
@@ -100,58 +95,93 @@
     </div>
 
     <script>
-        // LÓGICA 3D (Three.js)
+        // 1. CRONÓMETRO: Empezar a contar al cargar
+        let tiempoInicio = Date.now();
+
+        // 2. LÓGICA 3D (Tus gráficos originales)
         let scene, camera, renderer, controls;
         const container = document.getElementById('canvas-3d');
 
         function init3D() {
             scene = new THREE.Scene();
             scene.background = new THREE.Color(0xf8fafc);
-            
             camera = new THREE.PerspectiveCamera(50, container.clientWidth / container.clientHeight, 0.1, 1000);
             camera.position.set(2, 2, 4);
-
             renderer = new THREE.WebGLRenderer({ antialias: true });
             renderer.setSize(container.clientWidth, container.clientHeight);
             container.appendChild(renderer.domElement);
-
             controls = new THREE.OrbitControls(camera, renderer.domElement);
-            controls.enableDamping = true;
 
-            // Luces
             const light = new THREE.AmbientLight(0xffffff, 0.8);
             scene.add(light);
             const dirLight = new THREE.DirectionalLight(0xffffff, 0.5);
             dirLight.position.set(5, 10, 5);
             scene.add(dirLight);
 
-            // OBJETOS (Prototipo 3D)
-            // Placa Base (Verde como en tu imagen)
+            // Placa Base (Verde)
             const moboGeom = new THREE.BoxGeometry(3, 0.1, 2);
             const moboMat = new THREE.MeshPhongMaterial({ color: 0x22c55e });
-            const mobo = new THREE.Mesh(moboGeom, moboMat);
-            scene.add(mobo);
+            scene.add(new THREE.Mesh(moboGeom, moboMat));
 
-            // CPU (Gris metálico)
+            // CPU (Gris)
             const cpuGeom = new THREE.BoxGeometry(0.5, 0.15, 0.5);
             const cpuMat = new THREE.MeshPhongMaterial({ color: 0x94a3b8 });
             const cpu = new THREE.Mesh(cpuGeom, cpuMat);
-            cpu.position.y = 0.5; // Flotando para que el usuario lo vea
+            cpu.position.y = 0.5;
             scene.add(cpu);
 
-            function animate() {
-                requestAnimationFrame(animate);
-                controls.update();
-                renderer.render(scene, camera);
-            }
+            function animate() { requestAnimationFrame(animate); controls.update(); renderer.render(scene, camera); }
             animate();
         }
 
-        window.addEventListener('load', init3D);
-        window.addEventListener('resize', () => {
-            camera.aspect = container.clientWidth / container.clientHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(container.clientWidth, container.clientHeight);
+        // 3. LÓGICA DE TIEMPO (Reparada)
+        function tiempoASegundos(tStr) {
+            if (!tStr || tStr === "--") return 999999;
+            const partes = tStr.split(':');
+            return (parseInt(partes[0]) * 60) + parseInt(partes[1]);
+        }
+
+        function guardarAvance(puntosGanados) {
+            const ahora = Date.now();
+            const segundosTotales = Math.floor((ahora - tiempoInicio) / 1000);
+            
+            const min = Math.floor(segundosTotales / 60);
+            const seg = segundosTotales % 60;
+            const tiempoActualStr = `${min.toString().padStart(2, '0')}:${seg.toString().padStart(2, '0')}`;
+
+            let perfil = JSON.parse(localStorage.getItem('perfilActivo'));
+
+            if (perfil) {
+                perfil.puntos = (perfil.puntos || 0) + puntosGanados;
+                perfil.ensambles = (perfil.ensambles || 0) + 1;
+                perfil.logros = (perfil.logros || 0) + 1;
+
+                // --- LÓGICA DE COMPARACIÓN ---
+                // Si quieres mostrar el TIEMPO MÁS LARGO (el mayor): usa >
+                // Si quieres mostrar el TIEMPO MÁS RÁPIDO (el récord): usa <
+                const tiempoGuardadoSegundos = tiempoASegundos(perfil.mejorTiempo);
+                
+                if (perfil.mejorTiempo === "--" || segundosTotales > tiempoGuardadoSegundos) {
+                    perfil.mejorTiempo = tiempoActualStr;
+                    console.log("Nuevo tiempo máximo guardado:", tiempoActualStr);
+                }
+
+                // GUARDADO CRÍTICO: Debes actualizar ambos para que el menú lo vea
+                localStorage.setItem('perfilActivo', JSON.stringify(perfil));
+                localStorage.setItem(`perfil_${perfil.nombre}`, JSON.stringify(perfil));
+
+                alert(`¡Avance guardado! Tiempo de esta partida: ${tiempoActualStr}`);
+                window.location.href = "menu.html"; 
+            }
+        }
+
+        window.addEventListener('load', () => {
+            init3D();
+            const perfil = JSON.parse(localStorage.getItem('perfilActivo'));
+            if (perfil) {
+                document.querySelector('.bg-yellow-400.bg-opacity-20').innerHTML = `⭐ ${perfil.puntos || 0} pts`;
+                if (perfil.avatar) document.querySelector('.bg-blue-100 img').src = perfil.avatar;
+            }
         });
     </script>
 </body>

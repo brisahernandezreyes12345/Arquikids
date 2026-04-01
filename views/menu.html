@@ -32,7 +32,6 @@
         <p class="text-blue-500 text-2xl mb-12 font-light">¡Elige una aventura! 🚀</p>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-            
             <a href="catalogo.html" class="card-adventure bg-blue-500 rounded-[40px] p-12 text-white flex flex-col items-center group">
                 <div class="mb-6 p-6 bg-blue-400 bg-opacity-30 rounded-full">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -55,7 +54,6 @@
                 <p class="text-blue-100 mb-8">Aprende a armar una PC</p>
                 <div class="bg-white text-blue-600 px-8 py-2 rounded-full font-bold group-hover:bg-blue-50 transition-colors">Ir →</div>
             </a>
-
         </div>
 
         <div class="grid grid-cols-3 gap-4">
@@ -73,6 +71,31 @@
             </div>
         </div>
     </div>
+<script>
+    // Intentar cargar desde 'perfilActivo'
+    const perfilData = JSON.parse(localStorage.getItem('perfilActivo'));
 
+    if (perfilData) {
+        // Actualizar UI básica
+        document.querySelector('.font-bold.leading-none').textContent = perfilData.nombre;
+        document.querySelector('.text-xs.text-blue-200').textContent = `⭐ ${perfilData.puntos || 0} puntos`;
+        
+        if (perfilData.avatar) {
+            document.querySelector('.bg-blue-600 img').src = perfilData.avatar;
+        }
+
+        // Actualizar Estadísticas
+        const statsPárrafos = document.querySelectorAll('.grid-cols-3 p.text-3xl');
+        
+        if (statsPárrafos.length >= 3) {
+            statsPárrafos[0].textContent = perfilData.ensambles || 0;
+            statsPárrafos[1].textContent = perfilData.logros || 0;
+            // Mostramos lo que haya quedado en mejorTiempo (sea el mayor o el menor según tu elección)
+            statsPárrafos[2].textContent = perfilData.mejorTiempo || "--";
+        }
+    } else {
+        window.location.href = "perfil.html";
+    }
+</script>
 </body>
 </html>
