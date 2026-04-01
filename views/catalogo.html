@@ -2,98 +2,235 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Catálogo de Componentes</title>
+    <title>Catálogo de Componentes - Arquikids</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Outfit', sans-serif; }
-        .card-shadow { box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1); }
-        /* Estilo para el efecto de desenfoque al abrir el modal */
         .modal-active { overflow: hidden; }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .spinner {
+            border: 4px solid #bfdbfe;
+            border-top-color: #2563eb;
+            border-radius: 50%;
+            width: 44px; height: 44px;
+            animation: spin 0.8s linear infinite;
+            margin: auto;
+        }
+
+        /* Tarjeta con altura uniforme */
+        .comp-card {
+            background: white;
+            border-radius: 1.5rem;
+            border: 2px solid #bfdbfe;
+            box-shadow: 0 4px 20px rgba(37,99,235,0.08);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+            overflow: hidden;
+        }
+        .comp-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 30px rgba(37,99,235,0.16);
+            border-color: #3b82f6;
+        }
+        .comp-card .card-body {
+            padding: 1.25rem 1.25rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+        .comp-card .card-body .spacer { flex: 1; }
+
+        /* Modal animación */
+        @keyframes fadeUp {
+            from { opacity:0; transform:translateY(24px); }
+            to   { opacity:1; transform:translateY(0); }
+        }
+        .modal-box { animation: fadeUp 0.25s ease forwards; }
     </style>
 </head>
-<body class="bg-slate-50 p-8">
-    <div class="max-w-7xl mx-auto">
-        <div class="text-center mb-10">
-            <h2 class="text-5xl font-bold text-blue-700 mb-2">Catálogo de Componentes</h2>
-            <p class="text-blue-500 text-xl">¡Descubre todos los componentes de una computadora! 🔍</p>
-            <div class="inline-block bg-blue-600 text-white px-6 py-2 rounded-full mt-4 font-bold">Explorados: 0 / 12</div>
-        </div>
+<body class="min-h-screen" style="background: radial-gradient(ellipse at top, #eff6ff 0%, #f1f5f9 60%);">
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div class="bg-white rounded-3xl p-5 border-2 border-blue-400 card-shadow">
-                <div class="relative mb-4">
-                    <img src="https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=300" class="rounded-2xl w-full h-40 object-cover">
-                    <span class="absolute bottom-2 right-2 text-2xl">🧠</span>
+    <!-- ── Navbar ─────────────────────────────────────────────────────────── -->
+    <header class="sticky top-0 z-30 bg-white bg-opacity-80 backdrop-blur border-b border-blue-100 px-6 py-3">
+        <div class="max-w-6xl mx-auto flex items-center justify-between">
+            <a href="menu.html" class="text-blue-600 font-bold flex items-center gap-2 hover:text-blue-800 transition-colors text-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd"/>
+                </svg>
+                Volver al Menú
+            </a>
+
+            <!-- Badge usuario -->
+            <div id="user-badge" class="hidden items-center gap-3 bg-blue-600 text-white pl-2 pr-5 py-1.5 rounded-full shadow-md">
+                <img id="user-avatar" src="" class="w-9 h-9 rounded-full bg-white object-cover border-2 border-white">
+                <div class="leading-tight">
+                    <p id="user-name" class="font-bold text-sm leading-none"></p>
+                    <p id="user-points" class="text-xs text-blue-200 mt-0.5"></p>
                 </div>
-                <h3 class="text-blue-600 text-2xl font-bold text-center mb-2">Procesador</h3>
-                <p class="text-gray-500 text-sm text-center mb-4">¡Es el cerebro de la computadora! Piensa y toma decisiones.</p>
-                <div class="bg-blue-500 text-white p-2 rounded-xl text-xs flex items-center gap-2 mb-4">
-                    <span>🧠</span> Como el cerebro que piensa
-                </div>
-                <button onclick="openModal()" class="w-full bg-blue-600 text-white py-2 rounded-xl font-bold hover:bg-blue-700 transition-colors">ⓘ Ver Detalles</button>
             </div>
         </div>
+    </header>
 
-        <div class="text-center mt-12">
-            <a href="index.html" class="text-blue-600 font-bold hover:underline">← Volver al Menú Principal</a>
-        </div>
+    <!-- ── Hero ───────────────────────────────────────────────────────────── -->
+    <div class="text-center pt-12 pb-10 px-4">
+        <h1 class="text-5xl md:text-6xl font-bold text-blue-700 mb-3">Catálogo de Componentes</h1>
+        <p class="text-blue-500 text-xl mb-5">¡Descubre todos los componentes de una computadora! 🔍</p>
+        <span id="explorados-badge" class="inline-block bg-blue-600 text-white px-7 py-2 rounded-full font-bold shadow-md">
+            Cargando...
+        </span>
     </div>
 
-    <div id="modalDetalles" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50 p-4">
-        <div class="bg-white rounded-[2rem] max-w-md w-full p-6 relative overflow-hidden">
-            
-            <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-2xl font-bold">&times;</button>
+    <!-- ── Grid ───────────────────────────────────────────────────────────── -->
+    <main class="max-w-5xl mx-auto px-6 pb-16">
+        <div id="componentes-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7 justify-items-center">
+            <div class="col-span-3 py-24"><div class="spinner"></div></div>
+        </div>
+    </main>
 
-            <div class="text-center mb-6">
-                <h2 class="text-emerald-500 text-4xl font-bold">Tarjeta Madre</h2>
-                <p class="text-gray-500 text-lg">Motherboard</p>
+    <!-- ── Modal ──────────────────────────────────────────────────────────── -->
+    <div id="modalDetalles" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 p-4" style="display:none">
+        <div class="modal-box bg-white rounded-[2rem] max-w-md w-full p-7 relative shadow-2xl">
+            <button onclick="closeModal()" class="absolute top-4 right-5 text-gray-300 hover:text-gray-500 text-3xl font-light leading-none">&times;</button>
+
+            <div class="text-center mb-5">
+                <div id="modal-emoji" class="text-7xl mb-3 leading-none">⚙️</div>
+                <h2 id="modal-nombre" class="text-2xl font-bold text-blue-700"></h2>
             </div>
 
-            <div class="bg-blue-600 rounded-3xl p-6 text-white text-center mb-4 shadow-lg">
-                <div class="text-3xl mb-2">🏠</div>
-                <h4 class="text-xl font-bold mb-2">Como una ciudad donde viven todos los componentes</h4>
-                <p class="text-sm opacity-90">Es la pieza más grande que conecta a todas las demás. ¡Como una ciudad donde viven todos los habitantes de la computadora!</p>
+            <div class="bg-blue-600 rounded-2xl p-5 text-white text-center mb-4 shadow">
+                <p class="text-xs font-bold uppercase tracking-widest opacity-70 mb-1">🎯 Analogía</p>
+                <p id="modal-analogia" class="font-semibold leading-snug"></p>
             </div>
 
-            <div class="bg-blue-50 border border-blue-100 rounded-2xl p-4 mb-3 flex flex-col items-start">
-                <div class="flex items-center gap-2 mb-1">
-                    <span class="text-purple-400 text-xl">⚙️</span>
-                    <span class="text-blue-700 font-bold text-lg">Función</span>
-                </div>
-                <p class="text-gray-600">Conecta y comunica todos los componentes de la computadora</p>
+            <div class="bg-blue-50 border border-blue-100 rounded-2xl p-4">
+                <p class="text-blue-700 font-bold mb-1 flex items-center gap-2"><span>⚙️</span> Función</p>
+                <p id="modal-descripcion" class="text-gray-600 text-sm leading-relaxed"></p>
             </div>
-
-            <div class="bg-blue-50 border border-blue-100 rounded-2xl p-4 flex flex-col items-start">
-                <div class="flex items-center gap-2 mb-1">
-                    <span class="text-yellow-400 text-xl">⭐</span>
-                    <span class="text-blue-700 font-bold text-lg">Importancia</span>
-                </div>
-                <p class="text-gray-600">Es la base fundamental - sin ella nada funciona</p>
-            </div>
-
         </div>
     </div>
 
     <script>
-        const modal = document.getElementById('modalDetalles');
+        // ── Datos visuales ────────────────────────────────────────────────────
+        const VISUAL = {
+            procesador: { emoji:'🧠', img:'https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=400&q=80' },
+            ram:        { emoji:'💾', img:'https://images.unsplash.com/photo-1562976540-1502c2145186?w=400&q=80' },
+            madre:      { emoji:'🏗️', img:'https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&q=80' },
+            grafica:    { emoji:'🎨', img:'https://images.unsplash.com/photo-1587202372634-32705e3bf49c?w=400&q=80' },
+            disco:      { emoji:'💿', img:'https://images.unsplash.com/photo-1531492746076-161ca9bcad58?w=400&q=80' },
+            fuente:     { emoji:'⚡', img:'https://images.unsplash.com/photo-1563208723-b05a7a80b5ab?w=400&q=80' },
+            default:    { emoji:'⚙️', img:'https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&q=80' },
+        };
 
-        function openModal() {
-            modal.classList.remove('hidden');
+        function getVisual(nombre) {
+            const n = nombre.toLowerCase();
+            if (n.includes('procesador')||n.includes('cpu')||n.includes('intel')||n.includes('amd')) return VISUAL.procesador;
+            if (n.includes('ram')||n.includes('memoria')) return VISUAL.ram;
+            if (n.includes('madre')||n.includes('motherboard')) return VISUAL.madre;
+            if (n.includes('grafica')||n.includes('gráfica')||n.includes('gpu')) return VISUAL.grafica;
+            if (n.includes('disco')||n.includes('ssd')||n.includes('hdd')) return VISUAL.disco;
+            if (n.includes('fuente')||n.includes('psu')) return VISUAL.fuente;
+            return VISUAL.default;
+        }
+
+        function escapeHTML(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+        // ── Modal ─────────────────────────────────────────────────────────────
+        function openModal(comp) {
+            const v = getVisual(comp.nombreTecnico);
+            document.getElementById('modal-emoji').textContent = v.emoji;
+            document.getElementById('modal-nombre').textContent = comp.nombreTecnico;
+            document.getElementById('modal-analogia').textContent = comp.analogiaCotidiana || 'Sin analogía disponible';
+            document.getElementById('modal-descripcion').textContent = comp.descripcionSencilla || 'Sin descripción disponible';
+            const modal = document.getElementById('modalDetalles');
+            modal.style.display = 'flex';
             document.body.classList.add('modal-active');
         }
-
         function closeModal() {
-            modal.classList.add('hidden');
+            document.getElementById('modalDetalles').style.display = 'none';
             document.body.classList.remove('modal-active');
         }
+        document.getElementById('modalDetalles').addEventListener('click', e => {
+            if (e.target === e.currentTarget) closeModal();
+        });
 
-        // Cerrar el modal si se hace clic fuera de la caja blanca
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                closeModal();
+        // ── Crear tarjeta ─────────────────────────────────────────────────────
+        function crearTarjeta(comp) {
+            const v = getVisual(comp.nombreTecnico);
+            const div = document.createElement('div');
+            div.className = 'comp-card w-full max-w-xs';
+
+            div.innerHTML = `
+                <!-- Imagen -->
+                <div class="relative overflow-hidden" style="height:180px">
+                    <img src="${v.img}"
+                         style="width:100%;height:100%;object-fit:cover;display:block"
+                         onerror="this.parentElement.style.background='#eff6ff';this.style.display='none'">
+                    <span style="position:absolute;bottom:10px;right:12px;font-size:1.8rem;line-height:1">${v.emoji}</span>
+                </div>
+
+                <!-- Contenido -->
+                <div class="card-body">
+                    <h3 class="text-blue-600 text-lg font-bold text-center mb-1">${escapeHTML(comp.nombreTecnico)}</h3>
+                    <p class="text-gray-500 text-sm text-center mb-3">${escapeHTML(comp.descripcionSencilla || '')}</p>
+
+                    ${comp.analogiaCotidiana ? `
+                    <div class="bg-blue-50 border border-blue-100 text-blue-600 p-2.5 rounded-xl text-xs flex items-start gap-2 mb-3">
+                        <span class="mt-0.5 shrink-0">${v.emoji}</span>
+                        <span>${escapeHTML(comp.analogiaCotidiana)}</span>
+                    </div>` : '<div class="spacer"></div>'}
+
+                    <button
+                        onclick='openModal(${JSON.stringify(comp).replace(/'/g,"&#39;")})'
+                        class="mt-auto w-full bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white py-2.5 rounded-xl font-bold transition-colors text-sm">
+                        ⓘ Ver Detalles
+                    </button>
+                </div>`;
+            return div;
+        }
+
+        // ── Cargar desde API ──────────────────────────────────────────────────
+        async function cargarComponentes() {
+            const grid = document.getElementById('componentes-grid');
+            grid.innerHTML = '<div class="col-span-3 py-24"><div class="spinner"></div></div>';
+            try {
+                const res = await fetch('/api/componentes');
+                if (!res.ok) throw new Error(`Error HTTP ${res.status}`);
+                const lista = await res.json();
+                grid.innerHTML = '';
+                // Ajustar columnas según cantidad
+                if (lista.length <= 2) {
+                    grid.className = 'grid grid-cols-1 sm:grid-cols-2 gap-7 justify-items-center';
+                } else {
+                    grid.className = 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7 justify-items-center';
+                }
+                lista.forEach(c => grid.appendChild(crearTarjeta(c)));
+                document.getElementById('explorados-badge').textContent = `Componentes: ${lista.length}`;
+            } catch(err) {
+                grid.innerHTML = `
+                    <div class="col-span-3 text-center py-16">
+                        <p class="text-xl font-bold text-red-500 mb-2">⚠️ Error al cargar</p>
+                        <p class="text-gray-400 text-sm mb-4">${err.message}</p>
+                        <button onclick="cargarComponentes()" class="bg-blue-600 text-white px-6 py-2 rounded-xl font-bold hover:bg-blue-700">Reintentar</button>
+                    </div>`;
             }
         }
+
+        // ── Sesión ────────────────────────────────────────────────────────────
+        const u = localStorage.getItem('arquikids_usuario');
+        if (u) {
+            const usuario = JSON.parse(u);
+            const badge = document.getElementById('user-badge');
+            badge.classList.remove('hidden');
+            badge.style.display = 'flex';
+            document.getElementById('user-name').textContent = usuario.nickname;
+            document.getElementById('user-points').textContent = `⭐ ${usuario.puntosAcumulados} pts`;
+            if (usuario.avatar) document.getElementById('user-avatar').src = usuario.avatar;
+        }
+
+        cargarComponentes();
     </script>
 </body>
 </html>
