@@ -58,41 +58,33 @@
 
         <div class="grid grid-cols-3 gap-4">
             <div class="bg-blue-500 text-white p-6 rounded-3xl shadow-md">
-                <p class="text-3xl font-bold">0</p>
+                <p id="stat-ensambles" class="text-3xl font-bold">0</p>
                 <p class="text-xs uppercase tracking-widest font-bold opacity-80">Ensambles Completados</p>
             </div>
             <div class="bg-blue-500 text-white p-6 rounded-3xl shadow-md">
-                <p class="text-3xl font-bold">0</p>
+                <p id="stat-logros" class="text-3xl font-bold">0</p>
                 <p class="text-xs uppercase tracking-widest font-bold opacity-80">Logros Desbloqueados</p>
             </div>
             <div class="bg-blue-500 text-white p-6 rounded-3xl shadow-md">
-                <p class="text-3xl font-bold">--</p>
+                <p id="stat-tiempo" class="text-3xl font-bold">--</p>
                 <p class="text-xs uppercase tracking-widest font-bold opacity-80">Mejor Tiempo</p>
             </div>
         </div>
     </div>
 <script>
-    // Intentar cargar desde 'perfilActivo'
     const perfilData = JSON.parse(localStorage.getItem('perfilActivo'));
 
     if (perfilData) {
-        // Actualizar UI básica
         document.querySelector('.font-bold.leading-none').textContent = perfilData.nombre;
         document.querySelector('.text-xs.text-blue-200').textContent = `⭐ ${perfilData.puntos || 0} puntos`;
-        
+
         if (perfilData.avatar) {
             document.querySelector('.bg-blue-600 img').src = perfilData.avatar;
         }
 
-        // Actualizar Estadísticas
-        const statsPárrafos = document.querySelectorAll('.grid-cols-3 p.text-3xl');
-        
-        if (statsPárrafos.length >= 3) {
-            statsPárrafos[0].textContent = perfilData.ensambles || 0;
-            statsPárrafos[1].textContent = perfilData.logros || 0;
-            // Mostramos lo que haya quedado en mejorTiempo (sea el mayor o el menor según tu elección)
-            statsPárrafos[2].textContent = perfilData.mejorTiempo || "--";
-        }
+        document.getElementById('stat-ensambles').textContent = perfilData.ensambles || 0;
+        document.getElementById('stat-logros').textContent    = perfilData.logros    || 0;
+        document.getElementById('stat-tiempo').textContent    = perfilData.mejorTiempo || '--';
     } else {
         window.location.href = "perfil.html";
     }

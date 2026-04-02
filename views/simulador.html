@@ -26,6 +26,7 @@
             <span>Simulador de Ensamble</span>
         </div>
         <div class="flex items-center gap-4">
+            <div id="badge-tiempo" class="bg-blue-100 text-blue-700 px-4 py-1 rounded-full font-bold flex items-center gap-1">⏱️ <span id="tiempo-display">00:00</span></div>
             <div id="badge-puntos" class="bg-yellow-400 bg-opacity-20 text-yellow-600 px-4 py-1 rounded-full font-bold flex items-center gap-1" style="transition:transform 0.2s;">⭐ <span id="puntos-display">0</span> pts</div>
             <div class="bg-blue-100 p-1 rounded-full border-2 border-white shadow-sm">
                 <img src="https://img.icons8.com/bubbles/100/000000/robot.png" class="w-10 h-10">
@@ -89,8 +90,8 @@
 
         <div class="col-span-12 lg:col-span-8 flex flex-col gap-4">
             <div class="flex justify-end gap-3">
-                <button onclick="location.reload()" class="bg-blue-900 text-white px-6 py-2 rounded-xl font-bold shadow-md">🔄 Reiniciar</button>
-                <button onclick="guardarAvance(100)" class="bg-green-500 text-white px-6 py-2 rounded-xl font-bold shadow-md">💾 Guardar Avance</button>
+                <button onclick="const _p=localStorage.getItem('perfilActivo');if(_p)localStorage.removeItem('avance_'+JSON.parse(_p).nombre);location.reload();" class="bg-blue-900 text-white px-6 py-2 rounded-xl font-bold shadow-md">🔄 Reiniciar</button>
+                <button onclick="guardarAvance()" class="bg-green-500 text-white px-6 py-2 rounded-xl font-bold shadow-md">💾 Guardar Avance</button>
             </div>
             <div class="bg-white rounded-[3rem] p-4 flex-1 shadow-2xl border-4 border-blue-50 flex flex-col">
                 <h2 class="text-blue-700 text-3xl font-bold text-center py-4">Mesa de Trabajo</h2>
@@ -109,6 +110,72 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- ══ Modal Felicitaciones ══ -->
+    <div id="modal-feliz" style="display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.75);align-items:center;justify-content:center;font-family:'Outfit',sans-serif;">
+        <div style="background:linear-gradient(135deg,#1e40af,#2563eb);border-radius:2.5rem;padding:3rem 2.5rem;max-width:480px;width:92%;text-align:center;box-shadow:0 30px 80px rgba(0,0,0,0.4);position:relative;overflow:hidden;">
+            <!-- Confetti circles decorativos -->
+            <div style="position:absolute;top:-30px;left:-30px;width:120px;height:120px;background:rgba(255,255,255,0.06);border-radius:50%;"></div>
+            <div style="position:absolute;bottom:-40px;right:-20px;width:150px;height:150px;background:rgba(255,255,255,0.05);border-radius:50%;"></div>
+
+            <div style="font-size:5rem;margin-bottom:0.5rem;line-height:1;">🏆</div>
+            <h2 style="font-size:2rem;font-weight:900;color:white;margin-bottom:0.5rem;">¡Felicidades!</h2>
+            <p style="color:rgba(255,255,255,0.85);font-size:1.1rem;margin-bottom:0.25rem;">Ensamblaste la PC completa.</p>
+            <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin:1rem 0;">
+                <div style="background:rgba(255,255,255,0.15);border-radius:1rem;padding:0.6rem 1.2rem;display:inline-block;">
+                    <span style="color:#fde68a;font-size:1.3rem;font-weight:800;">⭐ <span id="feliz-puntos">500</span> pts</span>
+                </div>
+                <div style="background:rgba(255,255,255,0.15);border-radius:1rem;padding:0.6rem 1.2rem;display:inline-block;">
+                    <span style="color:#bfdbfe;font-size:1.3rem;font-weight:800;">⏱️ <span id="feliz-tiempo">00:00</span></span>
+                </div>
+            </div>
+            <p style="color:rgba(255,255,255,0.75);font-size:0.95rem;margin-bottom:2rem;">¡Ahora demuestra cuánto aprendiste sobre cada componente!</p>
+            <button onclick="abrirQuiz()" style="background:#fbbf24;color:#1e3a8a;border:none;padding:0.85rem 2.8rem;border-radius:1.2rem;font-size:1.1rem;font-weight:800;cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,0.2);transition:transform 0.15s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                ¡Responder preguntas! 📝
+            </button>
+        </div>
+    </div>
+
+    <!-- ══ Modal Quiz ══ -->
+    <div id="modal-quiz" style="display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.75);align-items:center;justify-content:center;font-family:'Outfit',sans-serif;overflow-y:auto;padding:1rem;">
+        <div style="background:white;border-radius:2.5rem;padding:2.5rem;max-width:540px;width:100%;box-shadow:0 30px 80px rgba(0,0,0,0.35);margin:auto;">
+
+            <!-- Header -->
+            <div style="text-align:center;margin-bottom:2rem;">
+                <div style="font-size:2.5rem;margin-bottom:0.4rem;">📝</div>
+                <h2 style="font-size:1.7rem;font-weight:900;color:#1e40af;margin:0 0 0.3rem;">Quiz de Componentes</h2>
+                <p style="color:#6b7280;font-size:0.95rem;margin:0;">Selecciona la respuesta correcta en cada pregunta.</p>
+            </div>
+
+            <!-- Preguntas -->
+            <div id="quiz-preguntas"></div>
+
+            <!-- Progreso quiz -->
+            <div style="margin:1.5rem 0 0.5rem;font-size:0.85rem;color:#6b7280;font-weight:700;display:flex;justify-content:space-between;">
+                <span>Progreso</span><span id="quiz-prog-txt">0 / 5</span>
+            </div>
+            <div style="background:#e5e7eb;border-radius:999px;height:10px;overflow:hidden;margin-bottom:1.5rem;">
+                <div id="quiz-prog-bar" style="height:10px;width:0%;background:linear-gradient(90deg,#3b82f6,#1d4ed8);border-radius:999px;transition:width 0.5s;"></div>
+            </div>
+
+            <button onclick="enviarQuiz()" style="width:100%;background:#2563eb;color:white;border:none;padding:0.9rem;border-radius:1.2rem;font-size:1.05rem;font-weight:800;cursor:pointer;">
+                Enviar respuestas ✅
+            </button>
+        </div>
+    </div>
+
+    <!-- ══ Modal Resultado Quiz ══ -->
+    <div id="modal-resultado" style="display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.75);align-items:center;justify-content:center;font-family:'Outfit',sans-serif;">
+        <div style="background:white;border-radius:2.5rem;padding:3rem 2.5rem;max-width:440px;width:92%;text-align:center;box-shadow:0 30px 80px rgba(0,0,0,0.35);">
+            <div id="res-emoji" style="font-size:4rem;margin-bottom:0.5rem;"></div>
+            <h2 id="res-titulo" style="font-size:1.8rem;font-weight:900;color:#1e40af;margin-bottom:0.5rem;"></h2>
+            <p id="res-desc" style="color:#374151;font-size:1rem;margin-bottom:1rem;"></p>
+            <div id="res-detalle" style="background:#f0f9ff;border-radius:1rem;padding:1rem;text-align:left;margin-bottom:1.5rem;font-size:0.9rem;line-height:2;"></div>
+            <button onclick="cerrarTodo()" style="background:#2563eb;color:white;border:none;padding:0.8rem 2.5rem;border-radius:1.2rem;font-size:1rem;font-weight:800;cursor:pointer;">
+                ¡Listo! 🚀
+            </button>
         </div>
     </div>
 
@@ -132,9 +199,9 @@
         ram:          { x: 67.217,  y: 21.323, z: -39.215,  tolerancia: 8 },
         gpu:          { x: -2.188,  y: 27.696, z: 58.684,   tolerancia: 8 },
         disco_duro:   { x: 3.334,   y: 7.959,  z: -86.261,  tolerancia: 8 },
-        psu:          { x: 84.159,  y: 59.328, z: -91.745,  tolerancia: 8 },
-        // Sin coordenadas aún — no valida (pon las tuyas cuando las midas)
-        refrigeracion:null,
+        psu:          { x: 84.159,  y: 59.328, z: -91.745,  tolerancia: 25 },
+        refrigeracion:{ x: 14.508,  y: 20.0,   z: -38.441,  tolerancia: 30 },
+        // Monitor y Mouse no tienen posición 3D — se "completan" solo con el botón
         monitor:      null,
         mouse:        null,
     };
@@ -170,9 +237,172 @@
     let puntos = 0;
     const colocadosOk = new Set(); // claves ya colocadas correctamente
 
-    // Componentes que tienen zona definida, en orden (cpu siempre primero)
-    const ORDEN_VALIDABLES = ['cpu','ram','gpu','disco_duro','psu'];
-    const TOTAL = ORDEN_VALIDABLES.length;
+    // ── Cronómetro ───────────────────────────────────────────────────────────
+    let tiempoSegundos = 0;
+    let cronometroInterval = null;
+
+    function iniciarCronometro() {
+        cronometroInterval = setInterval(() => {
+            tiempoSegundos++;
+            const m = String(Math.floor(tiempoSegundos / 60)).padStart(2, '0');
+            const s = String(tiempoSegundos % 60).padStart(2, '0');
+            document.getElementById('tiempo-display').textContent = m + ':' + s;
+        }, 1000);
+    }
+
+    function detenerCronometro() {
+        clearInterval(cronometroInterval);
+    }
+
+    // ── Guardar / Restaurar avance en sesión ────────────────────────────────
+    function guardarAvance() {
+        const perfilRaw = localStorage.getItem('perfilActivo');
+        if (!perfilRaw) { alert('⚠️ No hay perfil activo. Vuelve a seleccionar tu perfil.'); return; }
+        const perfil = JSON.parse(perfilRaw);
+
+        // Serializar posición y rotación de cada grupo cargado
+        const piezasGuardadas = [];
+        grupos.forEach(g => {
+            const clave = grupoClave.get(g);
+            if (!clave) return;
+            piezasGuardadas.push({
+                clave,
+                colocada: colocadosOk.has(clave),
+                pos: { x: g.position.x, y: g.position.y, z: g.position.z },
+                rot: { x: g.rotation.x, y: g.rotation.y, z: g.rotation.z }
+            });
+        });
+
+        const avance = {
+            puntos,
+            tiempoSegundos,
+            colocados: [...colocadosOk],
+            piezas: piezasGuardadas
+        };
+
+        localStorage.setItem(`avance_${perfil.nombre}`, JSON.stringify(avance));
+
+        // ── Actualizar perfil con puntos y tiempo actuales ────────────────────
+        perfil.puntos = Math.max(perfil.puntos || 0, puntos);
+        perfil.logros = perfil.puntos;
+        const mejorPrevio = perfil.mejorTiempo;
+        if (mejorPrevio === '--' || mejorPrevio === undefined || tiempoSegundos > mejorPrevio) {
+            perfil.mejorTiempo = tiempoSegundos;
+        }
+        localStorage.setItem(`perfil_${perfil.nombre}`, JSON.stringify(perfil));
+        localStorage.setItem('perfilActivo', JSON.stringify(perfil));
+
+        // Feedback visual en el botón
+        const btn = document.querySelector('[onclick="guardarAvance()"]');
+        if (btn) {
+            const textoOrig = btn.innerHTML;
+            btn.innerHTML = '✅ ¡Guardado!';
+            btn.disabled = true;
+            setTimeout(() => { btn.innerHTML = textoOrig; btn.disabled = false; }, 1800);
+        }
+    }
+
+    function restaurarAvance() {
+        const perfilRaw = localStorage.getItem('perfilActivo');
+        if (!perfilRaw) return false;
+        const perfil = JSON.parse(perfilRaw);
+        const avanceRaw = localStorage.getItem(`avance_${perfil.nombre}`);
+        if (!avanceRaw) return false;
+
+        const avance = JSON.parse(avanceRaw);
+
+        // Restaurar puntos y tiempo
+        puntos = avance.puntos || 0;
+        tiempoSegundos = avance.tiempoSegundos || 0;
+        const m = String(Math.floor(tiempoSegundos / 60)).padStart(2, '0');
+        const s = String(tiempoSegundos % 60).padStart(2, '0');
+        document.getElementById('tiempo-display').textContent = m + ':' + s;
+
+        // Restaurar piezas ya colocadas
+        if (avance.piezas && avance.piezas.length > 0) {
+            avance.piezas.forEach(p => {
+                const c = COMPONENTES[p.clave];
+                if (!c) return;
+
+                // Marcar botón como usado
+                const btn = document.getElementById('btn-' + p.clave);
+                if (btn) { btn.style.background = 'rgba(74,222,128,0.35)'; btn.style.pointerEvents = 'none'; btn.style.opacity = '0.7'; }
+
+                // Cargar el modelo con la posición guardada
+                const loader = new THREE.GLTFLoader();
+                loader.load(c.modelo, function(gltf) {
+                    const g = new THREE.Group();
+                    g.add(gltf.scene);
+                    g.scale.set(c.escala, c.escala, c.escala);
+                    g.position.set(p.pos.x, p.pos.y, p.pos.z);
+                    g.rotation.set(p.rot.x, p.rot.y, p.rot.z);
+                    scene.add(g);
+                    grupos.push(g);
+                    grupoNombre.set(g, (c.emoji||'') + ' ' + (c.nombre||''));
+                    grupoClave.set(g, p.clave);
+                    g.traverse(obj => { if (obj.isMesh) meshToGroup.set(obj.uuid, g); });
+
+                    // Si estaba colocada correctamente, colorear verde
+                    if (p.colocada) {
+                        colocadosOk.add(p.clave);
+                        g.traverse(obj => {
+                            if (!obj.isMesh) return;
+                            obj.userData.matOriginal = obj.material;
+                            obj.material = new THREE.MeshStandardMaterial({ color: 0x22c55e, transparent: true, opacity: 0.85 });
+                        });
+                    }
+                    actualizarUI();
+                }, undefined, (e) => console.error('Error restaurando:', p.clave, e));
+            });
+        }
+
+        // Restaurar colocados que son solo botón (monitor/mouse) aunque no tengan grupo 3D
+        if (avance.colocados) {
+            avance.colocados.forEach(k => colocadosOk.add(k));
+        }
+
+        actualizarUI();
+        return avance.piezas && avance.piezas.length > 0;
+    }
+    function guardarProgresoFinal(puntosFinales) {
+        const perfilRaw = localStorage.getItem('perfilActivo');
+        if (!perfilRaw) return;
+        const perfil = JSON.parse(perfilRaw);
+
+        // Los puntos ya se van actualizando con guardarAvance, solo aseguramos el máximo final
+        perfil.puntos = Math.max(perfil.puntos || 0, puntosFinales);
+
+        // Contar ensambles completados
+        perfil.ensambles = (perfil.ensambles || 0) + 1;
+
+        // Logros = puntos totales
+        perfil.logros = perfil.puntos;
+
+        // Guardar tiempo solo si es MENOR al mejor tiempo registrado (récord)
+        const tiempoActual = tiempoSegundos;
+        const mejorPrevio  = perfil.mejorTiempo;
+        if (mejorPrevio === '--' || mejorPrevio === undefined || tiempoActual > mejorPrevio) {
+            perfil.mejorTiempo = tiempoActual;
+        }
+
+        // Guardar en localStorage con clave del perfil y también como activo
+        localStorage.setItem(`perfil_${perfil.nombre}`, JSON.stringify(perfil));
+        localStorage.setItem('perfilActivo', JSON.stringify(perfil));
+    }
+
+    function formatearTiempo(seg) {
+        if (seg === '--' || seg === undefined) return '--:--';
+        const m = String(Math.floor(seg / 60)).padStart(2, '0');
+        const s = String(seg % 60).padStart(2, '0');
+        return m + ':' + s;
+    }
+
+    // Orden de pasos — cpu siempre primero, luego el resto con zona 3D, monitor y mouse al final (solo botón)
+    const ORDEN_VALIDABLES = ['cpu','ram','gpu','disco_duro','psu','refrigeracion','monitor','mouse'];
+    const TOTAL = ORDEN_VALIDABLES.length; // 8
+
+    // Monitor y Mouse se marcan como completados al presionar su botón (sin zona 3D)
+    const SOLO_BOTON = new Set(['monitor','mouse']);
 
     function siguienteSugerido() {
         for (const k of ORDEN_VALIDABLES) {
@@ -216,11 +446,143 @@
             document.getElementById('paso-num').textContent   = '🎉';
             document.getElementById('paso-titulo').textContent = '¡Todo listo!';
             document.getElementById('paso-desc').innerHTML    = '¡Felicidades! Ensamblaste todos los componentes correctamente. <strong>¡Eres un pro! 🚀</strong>';
+            // Mostrar ventana de felicitaciones (solo una vez)
+            if (!window._felizMostrado) {
+                window._felizMostrado = true;
+                detenerCronometro();
+                guardarProgresoFinal(puntos);
+                // Limpiar avance guardado — la partida terminó
+                const _p = localStorage.getItem('perfilActivo');
+                if (_p) localStorage.removeItem(`avance_${JSON.parse(_p).nombre}`);
+                setTimeout(() => {
+                    document.getElementById('feliz-puntos').textContent = puntos;
+                    // Mostrar tiempo final en el modal
+                    const tiempoEl = document.getElementById('feliz-tiempo');
+                    if (tiempoEl) tiempoEl.textContent = formatearTiempo(tiempoSegundos);
+                    document.getElementById('modal-feliz').style.display = 'flex';
+                }, 800);
+            }
         }
+    }
+
+    // ── Quiz ─────────────────────────────────────────────────────────────────
+    const PREGUNTAS = [
+        {
+            pregunta: '¿Cuál es el componente conocido como el "cerebro" de la computadora?',
+            opciones: ['Memoria RAM 💾', 'Procesador (CPU) 🧠', 'Tarjeta Gráfica 🎨', 'Fuente de Poder 🔋'],
+            correcta: 1
+        },
+        {
+            pregunta: '¿Qué hace la Memoria RAM?',
+            opciones: ['Guarda archivos permanentemente', 'Convierte electricidad en energía', 'Guarda temporalmente los programas abiertos', 'Muestra imágenes en pantalla'],
+            correcta: 2
+        },
+        {
+            pregunta: '¿Qué componente convierte la electricidad de la pared en energía para la PC?',
+            opciones: ['Tarjeta Gráfica 🎨', 'Disco Duro 💿', 'Refrigeración ❄️', 'Fuente de Poder 🔋'],
+            correcta: 3
+        },
+        {
+            pregunta: '¿Cuál componente guarda todos tus archivos y el sistema operativo de forma permanente?',
+            opciones: ['Memoria RAM 💾', 'Procesador (CPU) 🧠', 'Disco Duro 💿', 'Monitor 🖥️'],
+            correcta: 2
+        },
+        {
+            pregunta: '¿Para qué sirve la Tarjeta Gráfica (GPU)?',
+            opciones: ['Enfriar los componentes', 'Procesar y mostrar imágenes en pantalla', 'Guardar archivos', 'Conectar periféricos'],
+            correcta: 1
+        }
+    ];
+
+    let respuestasUsuario = {};
+
+    function abrirQuiz() {
+        document.getElementById('modal-feliz').style.display = 'none';
+        respuestasUsuario = {};
+        const contenedor = document.getElementById('quiz-preguntas');
+        contenedor.innerHTML = '';
+
+        PREGUNTAS.forEach((p, i) => {
+            const bloque = document.createElement('div');
+            bloque.style.cssText = 'margin-bottom:1.6rem;';
+            bloque.innerHTML = `
+                <p style="font-weight:800;color:#1e40af;font-size:1rem;margin:0 0 0.7rem;">${i+1}. ${p.pregunta}</p>
+                <div id="opts-${i}" style="display:flex;flex-direction:column;gap:0.4rem;">
+                    ${p.opciones.map((op, j) => `
+                        <label id="lbl-${i}-${j}" style="display:flex;align-items:center;gap:0.7rem;background:#f1f5f9;border-radius:0.8rem;padding:0.6rem 1rem;cursor:pointer;border:2px solid transparent;transition:border 0.15s;">
+                            <input type="radio" name="q${i}" value="${j}" onchange="marcarRespuesta(${i},${j})" style="accent-color:#2563eb;width:18px;height:18px;">
+                            <span style="font-size:0.95rem;color:#1f2937;">${op}</span>
+                        </label>
+                    `).join('')}
+                </div>
+            `;
+            contenedor.appendChild(bloque);
+        });
+
+        actualizarProgQuiz();
+        document.getElementById('modal-quiz').style.display = 'flex';
+    }
+
+    function marcarRespuesta(pregIdx, opIdx) {
+        respuestasUsuario[pregIdx] = opIdx;
+        // Resaltar opción seleccionada
+        PREGUNTAS[pregIdx].opciones.forEach((_, j) => {
+            const lbl = document.getElementById(`lbl-${pregIdx}-${j}`);
+            if (lbl) lbl.style.borderColor = (j === opIdx) ? '#2563eb' : 'transparent';
+        });
+        actualizarProgQuiz();
+    }
+
+    function actualizarProgQuiz() {
+        const respondidas = Object.keys(respuestasUsuario).length;
+        const pct = (respondidas / PREGUNTAS.length) * 100;
+        document.getElementById('quiz-prog-bar').style.width = pct + '%';
+        document.getElementById('quiz-prog-txt').textContent = respondidas + ' / ' + PREGUNTAS.length;
+    }
+
+    function enviarQuiz() {
+        if (Object.keys(respuestasUsuario).length < PREGUNTAS.length) {
+            alert('¡Responde todas las preguntas antes de enviar! 😊');
+            return;
+        }
+        let aciertos = 0;
+        let detalle = '';
+        PREGUNTAS.forEach((p, i) => {
+            const ok = respuestasUsuario[i] === p.correcta;
+            if (ok) aciertos++;
+            detalle += `<div>${ok ? '✅' : '❌'} <strong>P${i+1}:</strong> ${ok ? 'Correcto' : 'Incorrecto — era: <em>' + p.opciones[p.correcta] + '</em>'}</div>`;
+        });
+
+        const pct = Math.round((aciertos / PREGUNTAS.length) * 100);
+        let emoji, titulo, desc;
+        if (pct === 100)      { emoji='🏆'; titulo='¡Perfecto!';        desc='¡Respondiste todo correcto! Eres un experto en computadoras.'; }
+        else if (pct >= 60)   { emoji='🌟'; titulo='¡Muy bien!';        desc=`${aciertos} de ${PREGUNTAS.length} correctas. ¡Casi eres un experto!`; }
+        else                  { emoji='💪'; titulo='¡Sigue practicando!'; desc=`${aciertos} de ${PREGUNTAS.length} correctas. Repasa los componentes e inténtalo de nuevo.`; }
+
+        document.getElementById('res-emoji').textContent   = emoji;
+        document.getElementById('res-titulo').textContent  = titulo;
+        document.getElementById('res-desc').textContent    = desc;
+        document.getElementById('res-detalle').innerHTML   = detalle;
+
+        document.getElementById('modal-quiz').style.display    = 'none';
+        document.getElementById('modal-resultado').style.display = 'flex';
+    }
+
+    function cerrarTodo() {
+        document.getElementById('modal-resultado').style.display = 'none';
     }
 
     // ── Modal ────────────────────────────────────────────────────────────────
     function abrirModal(clave) {
+        // Monitor y Mouse bloqueados hasta que los 6 componentes anteriores estén colocados
+        if (SOLO_BOTON.has(clave)) {
+            const previos = ORDEN_VALIDABLES.filter(k => !SOLO_BOTON.has(k));
+            const todosListo = previos.every(k => colocadosOk.has(k));
+            if (!todosListo) {
+                alert('⚠️ Primero coloca todos los demás componentes correctamente antes de agregar el ' + COMPONENTES[clave].nombre + '.');
+                return;
+            }
+        }
         const c = COMPONENTES[clave];
         if (!c) return;
         componentePendiente = clave;
@@ -238,6 +600,17 @@
         cargarComponente(c.modelo, c.escala, c.posInicial, c.nombre, c.emoji, componentePendiente);
         const btn = document.getElementById('btn-' + componentePendiente);
         if (btn) { btn.style.background = 'rgba(74,222,128,0.35)'; btn.style.pointerEvents = 'none'; btn.style.opacity = '0.7'; }
+
+        // Monitor y Mouse: marcar como completados inmediatamente al pulsar el botón
+        if (SOLO_BOTON.has(componentePendiente) && !colocadosOk.has(componentePendiente)) {
+            colocadosOk.add(componentePendiente);
+            puntos += 100;
+            const badge = document.getElementById('badge-puntos');
+            badge.style.transform = 'scale(1.35)';
+            setTimeout(() => { badge.style.transform = 'scale(1)'; }, 300);
+            actualizarUI();
+        }
+
         componentePendiente = null;
     }
 
@@ -413,7 +786,13 @@
         if (renderer && scene && camera) renderer.render(scene, camera);
     }
 
-    window.addEventListener('load', () => { init3D(); actualizarUI(); });
+    window.addEventListener('load', () => {
+        init3D();
+        actualizarUI();
+        // Pequeño delay para que Three.js esté listo antes de restaurar
+        setTimeout(() => { restaurarAvance(); }, 300);
+        iniciarCronometro();
+    });
     window.addEventListener('resize', () => {
         if (!camera || !renderer) return;
         camera.aspect = container.clientWidth / container.clientHeight;

@@ -44,7 +44,7 @@
             <img src="https://img.icons8.com/bubbles/200/robot-vacuum.png" class="w-32 h-32 mb-2">
             <h2 class="text-2xl font-bold text-gray-800">Brisa</h2>
             <p id="puntos-Brisa" class="text-yellow-500 font-bold mb-4 flex items-center gap-1">⭐ 0 puntos</p>
-            <div class="grid grid-cols-2 gap-2 w-full mb-6">
+            <div class="grid grid-cols-3 gap-2 w-full mb-6">
                 <div class="bg-blue-50 p-2 rounded-xl text-center">
                     <p id="ensambles-Brisa" class="text-xs font-bold text-gray-400">0</p>
                     <p class="text-[10px] text-gray-500 uppercase">Ensambles</p>
@@ -52,6 +52,10 @@
                 <div class="bg-blue-50 p-2 rounded-xl text-center">
                     <p id="logros-Brisa" class="text-xs font-bold text-gray-400">0</p>
                     <p class="text-[10px] text-gray-500 uppercase">Logros</p>
+                </div>
+                <div class="bg-blue-50 p-2 rounded-xl text-center">
+                    <p id="tiempo-Brisa" class="text-xs font-bold text-gray-400">--:--</p>
+                    <p class="text-[10px] text-gray-500 uppercase">Mejor ⏱️</p>
                 </div>
             </div>
             <button onclick="seleccionarPerfil('Brisa', 'https://img.icons8.com/bubbles/200/robot-vacuum.png')" class="w-full btn-play-gradient text-white py-3 rounded-xl font-bold flex items-center justify-center gap-2 hover:opacity-90">
@@ -63,7 +67,7 @@
             <img src="https://img.icons8.com/bubbles/200/skull.png" class="w-32 h-32 mb-2">
             <h2 class="text-2xl font-bold text-gray-800">Luis</h2>
             <p id="puntos-Luis" class="text-yellow-500 font-bold mb-4 flex items-center gap-1">⭐ 0 puntos</p>
-            <div class="grid grid-cols-2 gap-2 w-full mb-6">
+            <div class="grid grid-cols-3 gap-2 w-full mb-6">
                 <div class="bg-blue-50 p-2 rounded-xl text-center">
                     <p id="ensambles-Luis" class="text-xs font-bold text-gray-400">0</p>
                     <p class="text-[10px] text-gray-500 uppercase">Ensambles</p>
@@ -71,6 +75,10 @@
                 <div class="bg-blue-50 p-2 rounded-xl text-center">
                     <p id="logros-Luis" class="text-xs font-bold text-gray-400">0</p>
                     <p class="text-[10px] text-gray-500 uppercase">Logros</p>
+                </div>
+                <div class="bg-blue-50 p-2 rounded-xl text-center">
+                    <p id="tiempo-Luis" class="text-xs font-bold text-gray-400">--:--</p>
+                    <p class="text-[10px] text-gray-500 uppercase">Mejor ⏱️</p>
                 </div>
             </div>
             <button onclick="seleccionarPerfil('Luis', 'https://img.icons8.com/bubbles/200/skull.png')" class="w-full btn-play-gradient text-white py-3 rounded-xl font-bold flex items-center justify-center gap-2 hover:opacity-90">
@@ -110,17 +118,29 @@
         let avatarElegido = null;
         const card = document.getElementById('new-profile-card');
 
+        // ── Utilidad: formatear segundos → MM:SS ──────────────────────────────
+        function formatearTiempo(seg) {
+            if (seg === '--' || seg === undefined || seg === null) return '--:--';
+            const m = String(Math.floor(seg / 60)).padStart(2, '0');
+            const s = String(seg % 60).padStart(2, '0');
+            return m + ':' + s;
+        }
+
+        // ── Cargar stats de un perfil en su tarjeta ───────────────────────────
+        function cargarStats(nombre) {
+            const guardado = localStorage.getItem(`perfil_${nombre}`);
+            if (!guardado) return;
+            const data = JSON.parse(guardado);
+            const el = (id) => document.getElementById(id);
+            if (el(`puntos-${nombre}`))    el(`puntos-${nombre}`).innerHTML    = `⭐ ${data.puntos || 0} puntos`;
+            if (el(`ensambles-${nombre}`)) el(`ensambles-${nombre}`).innerText = data.ensambles || 0;
+            if (el(`logros-${nombre}`))    el(`logros-${nombre}`).innerText    = data.logros || 0;
+            if (el(`tiempo-${nombre}`))    el(`tiempo-${nombre}`).innerText    = formatearTiempo(data.mejorTiempo);
+        }
+
         window.addEventListener('load', () => {
             const nombres = ['Brisa', 'Luis'];
-            nombres.forEach(nombre => {
-                const guardado = localStorage.getItem(`perfil_${nombre}`);
-                if (guardado) {
-                    const data = JSON.parse(guardado);
-                    document.getElementById(`puntos-${nombre}`).innerHTML = `⭐ ${data.puntos} puntos`;
-                    document.getElementById(`ensambles-${nombre}`).innerText = data.ensambles;
-                    document.getElementById(`logros-${nombre}`).innerText = data.logros;
-                }
-            });
+            nombres.forEach(nombre => cargarStats(nombre));
         });
 
         function abrirFormulario() {
@@ -153,7 +173,7 @@
                     puntos: 0,
                     ensambles: 0,
                     logros: 0,
-                    mejorTiempo: "--"
+                    mejorTiempo: '--'
                 };
                 localStorage.setItem(`perfil_${nombre}`, JSON.stringify(perfilData));
             } else {
@@ -172,7 +192,7 @@
                     puntos: 0,
                     ensambles: 0,
                     logros: 0,
-                    mejorTiempo: "--"
+                    mejorTiempo: '--'
                 };
                 localStorage.setItem(`perfil_${nombre}`, JSON.stringify(datosUsuario));
                 localStorage.setItem('perfilActivo', JSON.stringify(datosUsuario));
