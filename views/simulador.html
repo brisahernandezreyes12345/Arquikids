@@ -48,10 +48,30 @@
             <div class="bg-blue-500 rounded-[2.5rem] p-8 text-white shadow-xl">
                 <h3 class="text-center text-2xl font-bold mb-6">Componentes</h3>
                 <div class="grid grid-cols-2 gap-4">
-                    <div class="bg-white bg-opacity-20 p-4 rounded-2xl flex flex-col items-center"><div class="h-16 text-4xl">🏗️</div><p class="text-xs font-bold mt-2">Tarjeta Madre</p></div>
-                    <div class="bg-white bg-opacity-20 p-4 rounded-2xl flex flex-col items-center"><div class="h-16 text-4xl">🧠</div><p class="text-xs font-bold mt-2">Procesador</p></div>
-                    <div class="bg-white bg-opacity-20 p-4 rounded-2xl flex flex-col items-center"><div class="h-16 text-4xl">💾</div><p class="text-xs font-bold mt-2">Memoria RAM</p></div>
-                    <div class="bg-white bg-opacity-20 p-4 rounded-2xl flex flex-col items-center"><div class="h-16 text-4xl">🎨</div><p class="text-xs font-bold mt-2">Tarjeta Gráfica</p></div>
+                    <button onclick="abrirModal('cpu')"           id="btn-cpu"           class="comp-btn bg-white bg-opacity-20 p-4 rounded-2xl flex flex-col items-center hover:bg-opacity-30 transition-all cursor-pointer border-0">
+                        <div class="h-12 text-4xl">🧠</div><p class="text-xs font-bold mt-2">Procesador</p>
+                    </button>
+                    <button onclick="abrirModal('ram')"           id="btn-ram"           class="comp-btn bg-white bg-opacity-20 p-4 rounded-2xl flex flex-col items-center hover:bg-opacity-30 transition-all cursor-pointer border-0">
+                        <div class="h-12 text-4xl">💾</div><p class="text-xs font-bold mt-2">Memoria RAM</p>
+                    </button>
+                    <button onclick="abrirModal('gpu')"           id="btn-gpu"           class="comp-btn bg-white bg-opacity-20 p-4 rounded-2xl flex flex-col items-center hover:bg-opacity-30 transition-all cursor-pointer border-0">
+                        <div class="h-12 text-4xl">🎨</div><p class="text-xs font-bold mt-2">Tarjeta Gráfica</p>
+                    </button>
+                    <button onclick="abrirModal('disco_duro')"    id="btn-disco_duro"    class="comp-btn bg-white bg-opacity-20 p-4 rounded-2xl flex flex-col items-center hover:bg-opacity-30 transition-all cursor-pointer border-0">
+                        <div class="h-12 text-4xl">💿</div><p class="text-xs font-bold mt-2">Disco Duro</p>
+                    </button>
+                    <button onclick="abrirModal('psu')"           id="btn-psu"           class="comp-btn bg-white bg-opacity-20 p-4 rounded-2xl flex flex-col items-center hover:bg-opacity-30 transition-all cursor-pointer border-0">
+                        <div class="h-12 text-4xl">🔋</div><p class="text-xs font-bold mt-2">Fuente de Poder</p>
+                    </button>
+                    <button onclick="abrirModal('refrigeracion')" id="btn-refrigeracion" class="comp-btn bg-white bg-opacity-20 p-4 rounded-2xl flex flex-col items-center hover:bg-opacity-30 transition-all cursor-pointer border-0">
+                        <div class="h-12 text-4xl">❄️</div><p class="text-xs font-bold mt-2">Refrigeración</p>
+                    </button>
+                    <button onclick="abrirModal('monitor')"       id="btn-monitor"       class="comp-btn bg-white bg-opacity-20 p-4 rounded-2xl flex flex-col items-center hover:bg-opacity-30 transition-all cursor-pointer border-0">
+                        <div class="h-12 text-4xl">🖥️</div><p class="text-xs font-bold mt-2">Monitor</p>
+                    </button>
+                    <button onclick="abrirModal('mouse')"         id="btn-mouse"         class="comp-btn bg-white bg-opacity-20 p-4 rounded-2xl flex flex-col items-center hover:bg-opacity-30 transition-all cursor-pointer border-0">
+                        <div class="h-12 text-4xl">🖱️</div><p class="text-xs font-bold mt-2">Mouse</p>
+                    </button>
                 </div>
             </div>
         </div>
@@ -63,138 +83,255 @@
             </div>
             <div class="bg-white rounded-[3rem] p-4 flex-1 shadow-2xl border-4 border-blue-50 flex flex-col">
                 <h2 class="text-blue-700 text-3xl font-bold text-center py-4">Mesa de Trabajo</h2>
-                <div id="canvas-3d" class="flex-1 bg-slate-50 rounded-[2.5rem] overflow-hidden relative" style="min-height: 480px;"></div>
+                <div id="canvas-3d" class="flex-1 bg-slate-50 rounded-[2.5rem] overflow-hidden relative" style="min-height: 480px;">
+                    <div id="debug-panel" style="position:absolute;top:16px;left:16px;z-index:10;background:rgba(0,0,0,0.75);color:#4ade80;font-family:monospace;font-size:13px;padding:10px 14px;border-radius:10px;pointer-events:none;line-height:1.8;">
+                        <div style="color:white;font-weight:bold;margin-bottom:4px;">🔍 DEBUG — Posición</div>
+                        <div>Pieza: <span id="dbg-nombre" style="color:#facc15">—</span></div>
+                        <div>X: <span id="dbg-x">—</span></div>
+                        <div>Y: <span id="dbg-y">—</span></div>
+                        <div>Z: <span id="dbg-z">—</span></div>
+                    </div>
+                    <div id="rot-buttons" style="display:none;position:absolute;bottom:20px;left:50%;transform:translateX(-50%);z-index:10;gap:10px;flex-direction:row;">
+                        <button onclick="rotarSeleccionado('x')" style="background:#1d4ed8;color:white;border:none;padding:8px 18px;border-radius:10px;font-weight:bold;font-size:14px;cursor:pointer;">↕ Rotar X</button>
+                        <button onclick="rotarSeleccionado('y')" style="background:#1d4ed8;color:white;border:none;padding:8px 18px;border-radius:10px;font-weight:bold;font-size:14px;cursor:pointer;">↔ Rotar Y</button>
+                        <button onclick="rotarSeleccionado('z')" style="background:#1d4ed8;color:white;border:none;padding:8px 18px;border-radius:10px;font-weight:bold;font-size:14px;cursor:pointer;">🔄 Rotar Z</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <script>
-    let scene, camera, renderer, orbitControls;
-    // Cada grupo que se pueda arrastrar
-    let grupos = [];
+    <!-- Modal -->
+    <div id="modal" style="display:none;position:fixed;inset:0;z-index:100;background:rgba(0,0,0,0.6);align-items:center;justify-content:center;">
+        <div style="background:white;border-radius:2rem;padding:2.5rem;max-width:420px;width:90%;text-align:center;box-shadow:0 25px 60px rgba(0,0,0,0.3);">
+            <div id="modal-emoji" style="font-size:4rem;margin-bottom:1rem;"></div>
+            <h2 id="modal-titulo" style="font-size:1.8rem;font-weight:800;color:#1e40af;margin-bottom:0.75rem;"></h2>
+            <p id="modal-desc" style="font-size:1rem;color:#374151;line-height:1.6;margin-bottom:0.5rem;"></p>
+            <p id="modal-fun" style="font-size:0.9rem;color:#6b7280;font-style:italic;margin-bottom:1.5rem;"></p>
+            <button onclick="cerrarModal()" style="background:#2563eb;color:white;border:none;padding:0.75rem 2.5rem;border-radius:1rem;font-size:1rem;font-weight:700;cursor:pointer;">¡Listo, a colocarlo! 🚀</button>
+        </div>
+    </div>
 
-    // Estado del arrastre manual
+    <script>
+    // ── Zonas correctas + tolerancia ────────────────────────────────────────
+    // posCorrecta: coordenadas que mediste con el debug
+    // tolerancia: radio en unidades 3D (ajusta si quieres más/menos margen)
+    const ZONAS = {
+        cpu:          { x: 14.508,  y: 4.006,  z: -38.441,  tolerancia: 8 },
+        ram:          { x: 67.217,  y: 21.323, z: -39.215,  tolerancia: 8 },
+        gpu:          { x: -2.188,  y: 27.696, z: 58.684,   tolerancia: 8 },
+        disco_duro:   { x: 3.334,   y: 7.959,  z: -86.261,  tolerancia: 8 },
+        psu:          { x: 84.159,  y: 59.328, z: -91.745,  tolerancia: 8 },
+        // Sin coordenadas aún — no valida (pon las tuyas cuando las midas)
+        refrigeracion:null,
+        monitor:      null,
+        mouse:        null,
+    };
+
+    const COMPONENTES = {
+ cpu:          { nombre:'Procesador (CPU)',      emoji:'🧠', desc:'Es el cerebro de la computadora. Procesa todas las instrucciones del sistema.',           fun:'💡 ¡Un procesador moderno puede hacer billones de operaciones por segundo!', modelo:'../assets/models/cpu.glb',          escala:0.05,  posInicial:{x:0,y:0,z:0} },
+        ram:          { nombre:'Memoria RAM',           emoji:'💾', desc:'Guarda temporalmente los programas abiertos para que el procesador los use rápido.',      fun:'💡 RAM significa "Random Access Memory" o Memoria de Acceso Aleatorio.',     modelo:'../assets/models/ram.glb',          escala:930,   posInicial:{x:0,y:0,z:0} },
+        gpu:          { nombre:'Tarjeta Gráfica (GPU)', emoji:'🎨', desc:'Procesa y muestra las imágenes en pantalla. Clave para videojuegos y diseño.',            fun:'💡 Las GPU también se usan para entrenar inteligencia artificial.',           modelo:'../assets/models/gpu.glb',          escala:0.35,  posInicial:{x:0,y:0,z:0} },
+        disco_duro:   { nombre:'Disco Duro',            emoji:'💿', desc:'Guarda todos tus archivos y el sistema operativo de forma permanente.',                    fun:'💡 Los SSD son mucho más rápidos que los discos tradicionales.',              modelo:'../assets/models/disco_duro.glb',   escala:0.7,  posInicial:{x:0,y:0,z:0} },
+        psu:          { nombre:'Fuente de Poder (PSU)', emoji:'🔋', desc:'Convierte la electricidad de la pared en energía para todos los componentes.',            fun:'💡 Una buena fuente puede hacer que tu PC dure muchos más años.',            modelo:'../assets/models/psu.glb',          escala:3,  posInicial:{x:0,y:0,z:0} },
+        refrigeracion:{ nombre:'Refrigeración',         emoji:'❄️', desc:'Mantiene fríos al procesador y componentes para que no se dañen por el calor.',           fun:'💡 Algunos gamers usan refrigeración con agua para enfriar sus PCs.',        modelo:'../assets/models/refrigeracion.glb', escala:20, posInicial:{x:0,y:0,z:0} },
+        monitor:      { nombre:'Monitor',               emoji:'🖥️', desc:'La pantalla donde ves todo lo que hace la computadora.',                                  fun:'💡 Los monitores gaming muestran hasta 360 imágenes por segundo.',           modelo:'../assets/models/monitor.glb',      escala:8,  posInicial:{x:0,y:0,z:0} },
+        mouse:        { nombre:'Mouse',                 emoji:'🖱️', desc:'Dispositivo para mover el cursor y hacer clic. Una de las formas de controlar la PC.',   fun:'💡 El primer mouse fue inventado en 1964 y era de madera.',                  modelo:'../assets/models/mouse.glb',        escala:10,  posInicial:{x:0,y:0,z:0} },
+    };
+
+    let scene, camera, renderer, orbitControls;
+    let grupos = [];
     let isDragging = false;
     let selectedGroup = null;
-    let dragPlane = new THREE.Plane();
+    let ultimoSeleccionado = null;
+    let dragPlane  = new THREE.Plane();
     let dragOffset = new THREE.Vector3();
-    let raycaster = new THREE.Raycaster();
-    let mouse = new THREE.Vector2();
+    let raycaster  = new THREE.Raycaster();
+    let mouse      = new THREE.Vector2();
     let intersectPoint = new THREE.Vector3();
-
-    // Para detectar qué mesh pertenece a qué grupo
-    let meshToGroup = new Map();
-
+    let meshToGroup    = new Map();
+    let grupoNombre    = new Map();
+    let grupoClave     = new Map(); // grupo → clave del componente (para validar)
+    let componentePendiente = null;
     const container = document.getElementById('canvas-3d');
 
+    // ── Modal ────────────────────────────────────────────────────────────────
+    function abrirModal(clave) {
+        const c = COMPONENTES[clave];
+        if (!c) return;
+        componentePendiente = clave;
+        document.getElementById('modal-emoji').textContent  = c.emoji;
+        document.getElementById('modal-titulo').textContent = c.nombre;
+        document.getElementById('modal-desc').textContent   = c.desc;
+        document.getElementById('modal-fun').textContent    = c.fun;
+        document.getElementById('modal').style.display = 'flex';
+    }
+
+    function cerrarModal() {
+        document.getElementById('modal').style.display = 'none';
+        if (!componentePendiente) return;
+        const c = COMPONENTES[componentePendiente];
+        cargarComponente(c.modelo, c.escala, c.posInicial, c.nombre, c.emoji, componentePendiente);
+        const btn = document.getElementById('btn-' + componentePendiente);
+        if (btn) { btn.style.background = 'rgba(74,222,128,0.35)'; btn.style.pointerEvents = 'none'; btn.style.opacity = '0.7'; }
+        componentePendiente = null;
+    }
+
+    // ── Rotación ─────────────────────────────────────────────────────────────
+    function rotarSeleccionado(eje) {
+        if (!ultimoSeleccionado) return;
+        const a = Math.PI / 2;
+        if (eje === 'x') ultimoSeleccionado.rotation.x += a;
+        if (eje === 'y') ultimoSeleccionado.rotation.y += a;
+        if (eje === 'z') ultimoSeleccionado.rotation.z += a;
+    }
+
+    // ── Validación de posición ────────────────────────────────────────────────
+    function validarPosicion(grupo) {
+        const clave = grupoClave.get(grupo);
+        const zona  = clave ? ZONAS[clave] : null;
+        if (!zona) return; // sin zona definida, no valida
+
+        const p    = grupo.position;
+        const dist = Math.sqrt(
+            Math.pow(p.x - zona.x, 2) +
+            Math.pow(p.y - zona.y, 2) +
+            Math.pow(p.z - zona.z, 2)
+        );
+        const correcto = dist <= zona.tolerancia;
+
+        // Colorear todos los meshes del grupo
+        grupo.traverse(obj => {
+            if (!obj.isMesh) return;
+            if (!obj.userData.matOriginal) {
+                // Guardar material original la primera vez
+                obj.userData.matOriginal = obj.material;
+            }
+            if (correcto) {
+                obj.material = new THREE.MeshStandardMaterial({ color: 0x22c55e, transparent: true, opacity: 0.85 });
+            } else {
+                obj.material = new THREE.MeshStandardMaterial({ color: 0xef4444, transparent: true, opacity: 0.85 });
+            }
+        });
+    }
+
+    function restaurarMaterial(grupo) {
+        grupo.traverse(obj => {
+            if (obj.isMesh && obj.userData.matOriginal) {
+                obj.material = obj.userData.matOriginal;
+            }
+        });
+    }
+
+    // ── Init ─────────────────────────────────────────────────────────────────
     function init3D() {
         scene = new THREE.Scene();
         scene.background = new THREE.Color(0x1a1a1a);
-
         camera = new THREE.PerspectiveCamera(50, container.clientWidth / container.clientHeight, 0.1, 1000);
-        camera.position.set(5, 5, 12);
-
+        camera.position.set(0, 20, 40);
         renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(container.clientWidth, container.clientHeight);
         renderer.outputEncoding = THREE.sRGBEncoding;
         container.appendChild(renderer.domElement);
-
         orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
         orbitControls.enableDamping = true;
-
         scene.add(new THREE.AmbientLight(0xffffff, 0.8));
         const light = new THREE.DirectionalLight(0xffffff, 1);
         light.position.set(5, 10, 5);
         scene.add(light);
-
-        // Carga de piezas con posiciones separadas
-        cargarComponente('../assets/models/motherboard.glb', 0.15, { x: 0,  y: -1, z: 0 });
-        cargarComponente('../assets/models/cpu.glb',         0.05, { x: -5, y: 0,  z: 0 });
-        cargarComponente('../assets/models/ram.glb',         0.1,  { x: 5,  y: 0,  z: 0 });
-        cargarComponente('../assets/models/gpu.glb',         0.01, { x: 0,  y: 0,  z: 5 });
-
-        // Eventos de arrastre manual
+        cargarFijo('../assets/models/placa_base.glb', 50, {x:0,y:0,z:0});
         renderer.domElement.addEventListener('pointerdown', onPointerDown);
         renderer.domElement.addEventListener('pointermove', onPointerMove);
         renderer.domElement.addEventListener('pointerup',   onPointerUp);
-
         animate();
     }
 
-    function cargarComponente(ruta, escala, posicion) {
+    function cargarFijo(ruta, escala, pos) {
         const loader = new THREE.GLTFLoader();
-        loader.load(ruta, function (gltf) {
-            const grupo = new THREE.Group();
-            grupo.add(gltf.scene);
-            grupo.scale.set(escala, escala, escala);
-            grupo.position.set(posicion.x, posicion.y, posicion.z);
-            scene.add(grupo);
-            grupos.push(grupo);
-
-            // Mapeamos todos los meshes del grupo a su grupo padre
-            grupo.traverse(obj => {
-                if (obj.isMesh) {
-                    meshToGroup.set(obj.uuid, grupo);
-                }
-            });
-
-        }, undefined, (error) => console.error("Error cargando:", ruta, error));
+        loader.load(ruta, function(gltf) {
+            const g = new THREE.Group();
+            g.add(gltf.scene);
+            g.scale.set(escala, escala, escala);
+            g.position.set(pos.x, pos.y, pos.z);
+            scene.add(g);
+        }, undefined, (e) => console.error('Error placa_base:', e));
     }
 
-    // ---- Lógica de arrastre manual ----
-
-    function getMouseNDC(event) {
-        const rect = renderer.domElement.getBoundingClientRect();
-        mouse.x =  ((event.clientX - rect.left) / rect.width)  * 2 - 1;
-        mouse.y = -((event.clientY - rect.top)  / rect.height) * 2 + 1;
+    function cargarComponente(ruta, escala, pos, nombre, emoji, clave) {
+        const loader = new THREE.GLTFLoader();
+        loader.load(ruta, function(gltf) {
+            const g = new THREE.Group();
+            g.add(gltf.scene);
+            g.scale.set(escala, escala, escala);
+            g.position.set(pos.x, pos.y, pos.z);
+            scene.add(g);
+            grupos.push(g);
+            grupoNombre.set(g, (emoji||'') + ' ' + (nombre||''));
+            grupoClave.set(g, clave);
+            g.traverse(obj => { if (obj.isMesh) meshToGroup.set(obj.uuid, g); });
+        }, undefined, (e) => console.error('Error:', ruta, e));
     }
 
-    function onPointerDown(event) {
-        getMouseNDC(event);
+    // ── Arrastre ──────────────────────────────────────────────────────────────
+    function getMouseNDC(e) {
+        const r = renderer.domElement.getBoundingClientRect();
+        mouse.x =  ((e.clientX - r.left) / r.width)  * 2 - 1;
+        mouse.y = -((e.clientY - r.top)  / r.height) * 2 + 1;
+    }
+
+    function onPointerDown(e) {
+        getMouseNDC(e);
         raycaster.setFromCamera(mouse, camera);
-
-        // Recolectamos todos los meshes de todos los grupos
-        const allMeshes = [];
-        grupos.forEach(g => g.traverse(obj => { if (obj.isMesh) allMeshes.push(obj); }));
-
-        const hits = raycaster.intersectObjects(allMeshes, false);
-        if (hits.length === 0) return;
-
-        const hitMesh = hits[0].object;
-        selectedGroup = meshToGroup.get(hitMesh.uuid);
+        const meshes = [];
+        grupos.forEach(g => g.traverse(o => { if (o.isMesh) meshes.push(o); }));
+        const hits = raycaster.intersectObjects(meshes, false);
+        if (!hits.length) return;
+        selectedGroup = meshToGroup.get(hits[0].object.uuid);
         if (!selectedGroup) return;
-
+        ultimoSeleccionado = selectedGroup;
+        // Al empezar a arrastrar, restaurar color original
+        restaurarMaterial(selectedGroup);
         isDragging = true;
         orbitControls.enabled = false;
         renderer.domElement.style.cursor = 'grabbing';
-
-        // Plano de arrastre horizontal en la altura actual del grupo
+        document.getElementById('rot-buttons').style.display = 'flex';
         dragPlane.setFromNormalAndCoplanarPoint(
             camera.getWorldDirection(new THREE.Vector3()).negate(),
             selectedGroup.position
         );
-
         raycaster.ray.intersectPlane(dragPlane, intersectPoint);
         dragOffset.copy(intersectPoint).sub(selectedGroup.position);
     }
 
-    function onPointerMove(event) {
+    function onPointerMove(e) {
         if (!isDragging || !selectedGroup) return;
-        getMouseNDC(event);
+        getMouseNDC(e);
         raycaster.setFromCamera(mouse, camera);
         if (raycaster.ray.intersectPlane(dragPlane, intersectPoint)) {
             selectedGroup.position.copy(intersectPoint.sub(dragOffset));
+            const p = selectedGroup.position;
+            document.getElementById('dbg-nombre').textContent = grupoNombre.get(selectedGroup) || '?';
+            document.getElementById('dbg-x').textContent = p.x.toFixed(3);
+            document.getElementById('dbg-y').textContent = p.y.toFixed(3);
+            document.getElementById('dbg-z').textContent = p.z.toFixed(3);
         }
     }
 
     function onPointerUp() {
+        if (selectedGroup) {
+            const p = selectedGroup.position;
+            document.getElementById('dbg-nombre').textContent = grupoNombre.get(selectedGroup) || '?';
+            document.getElementById('dbg-x').textContent = p.x.toFixed(3);
+            document.getElementById('dbg-y').textContent = p.y.toFixed(3);
+            document.getElementById('dbg-z').textContent = p.z.toFixed(3);
+            // Validar posición al soltar
+            validarPosicion(selectedGroup);
+        }
         isDragging = false;
         selectedGroup = null;
         orbitControls.enabled = true;
         renderer.domElement.style.cursor = 'grab';
     }
-
-    // ---- Loop de animación ----
 
     function animate() {
         requestAnimationFrame(animate);
