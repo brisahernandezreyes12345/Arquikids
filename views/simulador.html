@@ -22,7 +22,7 @@
             ← Menú Principal
         </a>
         <div class="flex items-center gap-2 text-blue-700 font-bold">
-            <span>🔧</span>
+            <span></span>
             <span>Simulador de Ensamble</span>
         </div>
         <div class="flex items-center gap-4">
@@ -42,7 +42,7 @@
                     <h2 id="paso-titulo" class="text-2xl font-bold">Paso 1 de 5</h2>
                 </div>
                 <div class="bg-blue-500 bg-opacity-40 p-6 rounded-3xl mb-5">
-                    <p id="paso-desc" class="text-lg leading-snug">¡Empieza colocando el <strong>Procesador (CPU) 🧠</strong> en su lugar de la placa base!</p>
+                    <p id="paso-desc" class="text-lg leading-snug">¡Empieza colocando el <strong>Procesador (CPU) </strong> en su lugar de la placa base!</p>
                 </div>
                 <!-- Barra de progreso -->
                 <div>
@@ -61,28 +61,28 @@
                 <h3 class="text-center text-2xl font-bold mb-6">Componentes</h3>
                 <div class="grid grid-cols-2 gap-4">
                     <button onclick="abrirModal('cpu')"           id="btn-cpu"           class="comp-btn bg-white bg-opacity-20 p-4 rounded-2xl flex flex-col items-center hover:bg-opacity-30 transition-all cursor-pointer border-0">
-                        <div class="h-12 text-4xl">🧠</div><p class="text-xs font-bold mt-2">Procesador</p>
+                        <div class="h-12 flex items-center justify-center"><img src="../assets/images/procesador.png" alt="Procesador" class="h-12 w-12 object-contain"></div><p class="text-xs font-bold mt-2">Procesador</p>
                     </button>
                     <button onclick="abrirModal('ram')"           id="btn-ram"           class="comp-btn bg-white bg-opacity-20 p-4 rounded-2xl flex flex-col items-center hover:bg-opacity-30 transition-all cursor-pointer border-0">
-                        <div class="h-12 text-4xl">💾</div><p class="text-xs font-bold mt-2">Memoria RAM</p>
+                        <div class="h-12 flex items-center justify-center"><img src="../assets/images/ram.png" alt="Memoria RAM" class="h-12 w-12 object-contain"></div><p class="text-xs font-bold mt-2">Memoria RAM</p>
                     </button>
                     <button onclick="abrirModal('gpu')"           id="btn-gpu"           class="comp-btn bg-white bg-opacity-20 p-4 rounded-2xl flex flex-col items-center hover:bg-opacity-30 transition-all cursor-pointer border-0">
-                        <div class="h-12 text-4xl">🎨</div><p class="text-xs font-bold mt-2">Tarjeta Gráfica</p>
+                        <div class="h-12 flex items-center justify-center"><img src="../assets/images/gpu.png" alt="Tarjeta Gráfica" class="h-12 w-12 object-contain"></div><p class="text-xs font-bold mt-2">Tarjeta Gráfica</p>
                     </button>
                     <button onclick="abrirModal('disco_duro')"    id="btn-disco_duro"    class="comp-btn bg-white bg-opacity-20 p-4 rounded-2xl flex flex-col items-center hover:bg-opacity-30 transition-all cursor-pointer border-0">
-                        <div class="h-12 text-4xl">💿</div><p class="text-xs font-bold mt-2">Disco Duro</p>
+                        <div class="h-12 flex items-center justify-center"><img src="../assets/images/disco_duro.png" alt="Disco Duro" class="h-12 w-12 object-contain"></div><p class="text-xs font-bold mt-2">Disco Duro</p>
                     </button>
                     <button onclick="abrirModal('psu')"           id="btn-psu"           class="comp-btn bg-white bg-opacity-20 p-4 rounded-2xl flex flex-col items-center hover:bg-opacity-30 transition-all cursor-pointer border-0">
-                        <div class="h-12 text-4xl">🔋</div><p class="text-xs font-bold mt-2">Fuente de Poder</p>
+                        <div class="h-12 flex items-center justify-center"><img src="../assets/images/psu.png" alt="Fuente de Poder" class="h-12 w-12 object-contain"></div><p class="text-xs font-bold mt-2">Fuente de Poder</p>
                     </button>
                     <button onclick="abrirModal('refrigeracion')" id="btn-refrigeracion" class="comp-btn bg-white bg-opacity-20 p-4 rounded-2xl flex flex-col items-center hover:bg-opacity-30 transition-all cursor-pointer border-0">
-                        <div class="h-12 text-4xl">❄️</div><p class="text-xs font-bold mt-2">Refrigeración</p>
+                        <div class="h-12 flex items-center justify-center"><img src="../assets/images/refrigeracion.png" alt="Refrigeración" class="h-12 w-12 object-contain"></div><p class="text-xs font-bold mt-2">Refrigeración</p>
                     </button>
                     <button onclick="abrirModal('monitor')"       id="btn-monitor"       class="comp-btn bg-white bg-opacity-20 p-4 rounded-2xl flex flex-col items-center hover:bg-opacity-30 transition-all cursor-pointer border-0">
-                        <div class="h-12 text-4xl">🖥️</div><p class="text-xs font-bold mt-2">Monitor</p>
+                        <div class="h-12 flex items-center justify-center"><img src="../assets/images/monitor.png" alt="Monitor" class="h-12 w-12 object-contain"></div><p class="text-xs font-bold mt-2">Monitor</p>
                     </button>
                     <button onclick="abrirModal('mouse')"         id="btn-mouse"         class="comp-btn bg-white bg-opacity-20 p-4 rounded-2xl flex flex-col items-center hover:bg-opacity-30 transition-all cursor-pointer border-0">
-                        <div class="h-12 text-4xl">🖱️</div><p class="text-xs font-bold mt-2">Mouse</p>
+                        <div class="h-12 flex items-center justify-center"><img src="../assets/images/mouse.png" alt="Mouse" class="h-12 w-12 object-contain"></div><p class="text-xs font-bold mt-2">Mouse</p>
                     </button>
                 </div>
             </div>
@@ -90,23 +90,23 @@
 
         <div class="col-span-12 lg:col-span-8 flex flex-col gap-4">
             <div class="flex justify-end gap-3">
-                <button onclick="const _p=localStorage.getItem('perfilActivo');if(_p)localStorage.removeItem('avance_'+JSON.parse(_p).nombre);location.reload();" class="bg-blue-900 text-white px-6 py-2 rounded-xl font-bold shadow-md">🔄 Reiniciar</button>
-                <button onclick="guardarAvance()" class="bg-green-500 text-white px-6 py-2 rounded-xl font-bold shadow-md">💾 Guardar Avance</button>
+                <button onclick="const _p=localStorage.getItem('perfilActivo');if(_p)localStorage.removeItem('avance_'+JSON.parse(_p).nombre);location.reload();" class="bg-blue-900 text-white px-6 py-2 rounded-xl font-bold shadow-md"> Reiniciar</button>
+                <button onclick="guardarAvance()" class="bg-green-500 text-white px-6 py-2 rounded-xl font-bold shadow-md"> Guardar Avance</button>
             </div>
             <div class="bg-white rounded-[3rem] p-4 flex-1 shadow-2xl border-4 border-blue-50 flex flex-col">
                 <h2 class="text-blue-700 text-3xl font-bold text-center py-4">Mesa de Trabajo</h2>
                 <div id="canvas-3d" class="flex-1 bg-slate-50 rounded-[2.5rem] overflow-hidden relative" style="min-height: 480px;">
                     <div id="debug-panel" style="position:absolute;top:16px;left:16px;z-index:10;background:rgba(0,0,0,0.75);color:#4ade80;font-family:monospace;font-size:13px;padding:10px 14px;border-radius:10px;pointer-events:none;line-height:1.8;">
-                        <div style="color:white;font-weight:bold;margin-bottom:4px;">🔍 DEBUG — Posición</div>
+                        <div style="color:white;font-weight:bold;margin-bottom:4px;"> DEBUG — Posición</div>
                         <div>Pieza: <span id="dbg-nombre" style="color:#facc15">—</span></div>
                         <div>X: <span id="dbg-x">—</span></div>
                         <div>Y: <span id="dbg-y">—</span></div>
                         <div>Z: <span id="dbg-z">—</span></div>
                     </div>
                     <div id="rot-buttons" style="display:none;position:absolute;bottom:20px;left:50%;transform:translateX(-50%);z-index:10;gap:10px;flex-direction:row;">
-                        <button onclick="rotarSeleccionado('x')" style="background:#1d4ed8;color:white;border:none;padding:8px 18px;border-radius:10px;font-weight:bold;font-size:14px;cursor:pointer;">↕ Rotar X</button>
-                        <button onclick="rotarSeleccionado('y')" style="background:#1d4ed8;color:white;border:none;padding:8px 18px;border-radius:10px;font-weight:bold;font-size:14px;cursor:pointer;">↔ Rotar Y</button>
-                        <button onclick="rotarSeleccionado('z')" style="background:#1d4ed8;color:white;border:none;padding:8px 18px;border-radius:10px;font-weight:bold;font-size:14px;cursor:pointer;">🔄 Rotar Z</button>
+                        <button onclick="rotarSeleccionado('x')" style="background:#1d4ed8;color:white;border:none;padding:8px 18px;border-radius:10px;font-weight:bold;font-size:14px;cursor:pointer;"> Rotar X</button>
+                        <button onclick="rotarSeleccionado('y')" style="background:#1d4ed8;color:white;border:none;padding:8px 18px;border-radius:10px;font-weight:bold;font-size:14px;cursor:pointer;"> Rotar Y</button>
+                        <button onclick="rotarSeleccionado('z')" style="background:#1d4ed8;color:white;border:none;padding:8px 18px;border-radius:10px;font-weight:bold;font-size:14px;cursor:pointer;"> Rotar Z</button>
                     </div>
                 </div>
             </div>
@@ -120,20 +120,20 @@
             <div style="position:absolute;top:-30px;left:-30px;width:120px;height:120px;background:rgba(255,255,255,0.06);border-radius:50%;"></div>
             <div style="position:absolute;bottom:-40px;right:-20px;width:150px;height:150px;background:rgba(255,255,255,0.05);border-radius:50%;"></div>
 
-            <div style="font-size:5rem;margin-bottom:0.5rem;line-height:1;">🏆</div>
+            <div style="font-size:5rem;margin-bottom:0.5rem;line-height:1;"></div>
             <h2 style="font-size:2rem;font-weight:900;color:white;margin-bottom:0.5rem;">¡Felicidades!</h2>
             <p style="color:rgba(255,255,255,0.85);font-size:1.1rem;margin-bottom:0.25rem;">Ensamblaste la PC completa.</p>
             <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin:1rem 0;">
                 <div style="background:rgba(255,255,255,0.15);border-radius:1rem;padding:0.6rem 1.2rem;display:inline-block;">
-                    <span style="color:#fde68a;font-size:1.3rem;font-weight:800;">⭐ <span id="feliz-puntos">500</span> pts</span>
+                    <span style="color:#fde68a;font-size:1.3rem;font-weight:800;"> <span id="feliz-puntos">500</span> pts</span>
                 </div>
                 <div style="background:rgba(255,255,255,0.15);border-radius:1rem;padding:0.6rem 1.2rem;display:inline-block;">
-                    <span style="color:#bfdbfe;font-size:1.3rem;font-weight:800;">⏱️ <span id="feliz-tiempo">00:00</span></span>
+                    <span style="color:#bfdbfe;font-size:1.3rem;font-weight:800;"> <span id="feliz-tiempo">00:00</span></span>
                 </div>
             </div>
             <p style="color:rgba(255,255,255,0.75);font-size:0.95rem;margin-bottom:2rem;">¡Ahora demuestra cuánto aprendiste sobre cada componente!</p>
             <button onclick="abrirQuiz()" style="background:#fbbf24;color:#1e3a8a;border:none;padding:0.85rem 2.8rem;border-radius:1.2rem;font-size:1.1rem;font-weight:800;cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,0.2);transition:transform 0.15s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
-                ¡Responder preguntas! 📝
+                ¡Responder preguntas! 
             </button>
         </div>
     </div>
@@ -144,7 +144,7 @@
 
             <!-- Header -->
             <div style="text-align:center;margin-bottom:2rem;">
-                <div style="font-size:2.5rem;margin-bottom:0.4rem;">📝</div>
+                <div style="font-size:2.5rem;margin-bottom:0.4rem;"></div>
                 <h2 style="font-size:1.7rem;font-weight:900;color:#1e40af;margin:0 0 0.3rem;">Quiz de Componentes</h2>
                 <p style="color:#6b7280;font-size:0.95rem;margin:0;">Selecciona la respuesta correcta en cada pregunta.</p>
             </div>
@@ -161,7 +161,7 @@
             </div>
 
             <button onclick="enviarQuiz()" style="width:100%;background:#2563eb;color:white;border:none;padding:0.9rem;border-radius:1.2rem;font-size:1.05rem;font-weight:800;cursor:pointer;">
-                Enviar respuestas ✅
+                Enviar respuestas 
             </button>
         </div>
     </div>
@@ -174,7 +174,7 @@
             <p id="res-desc" style="color:#374151;font-size:1rem;margin-bottom:1rem;"></p>
             <div id="res-detalle" style="background:#f0f9ff;border-radius:1rem;padding:1rem;text-align:left;margin-bottom:1.5rem;font-size:0.9rem;line-height:2;"></div>
             <button onclick="cerrarTodo()" style="background:#2563eb;color:white;border:none;padding:0.8rem 2.5rem;border-radius:1.2rem;font-size:1rem;font-weight:800;cursor:pointer;">
-                ¡Listo! 🚀
+                ¡Listo! 
             </button>
         </div>
     </div>
@@ -182,11 +182,14 @@
     <!-- Modal -->
     <div id="modal" style="display:none;position:fixed;inset:0;z-index:100;background:rgba(0,0,0,0.6);align-items:center;justify-content:center;">
         <div style="background:white;border-radius:2rem;padding:2.5rem;max-width:420px;width:90%;text-align:center;box-shadow:0 25px 60px rgba(0,0,0,0.3);">
-            <div id="modal-emoji" style="font-size:4rem;margin-bottom:1rem;"></div>
+        <div id="modal-emoji" style="font-size:4rem;margin-bottom:1rem;display:flex;justify-content:center;align-items:center;height:80px;">
+            <img id="modal-emoji-img" src="" alt="" style="height:80px;width:80px;object-fit:contain;display:none;">
+            <span id="modal-emoji-txt"></span>
+        </div>
             <h2 id="modal-titulo" style="font-size:1.8rem;font-weight:800;color:#1e40af;margin-bottom:0.75rem;"></h2>
             <p id="modal-desc" style="font-size:1rem;color:#374151;line-height:1.6;margin-bottom:0.5rem;"></p>
             <p id="modal-fun" style="font-size:0.9rem;color:#6b7280;font-style:italic;margin-bottom:1.5rem;"></p>
-            <button onclick="cerrarModal()" style="background:#2563eb;color:white;border:none;padding:0.75rem 2.5rem;border-radius:1rem;font-size:1rem;font-weight:700;cursor:pointer;">¡Listo, a colocarlo! 🚀</button>
+            <button onclick="cerrarModal()" style="background:#2563eb;color:white;border:none;padding:0.75rem 2.5rem;border-radius:1rem;font-size:1rem;font-weight:700;cursor:pointer;">¡Listo, a colocarlo! </button>
         </div>
     </div>
 
@@ -207,14 +210,14 @@
     };
 
     const COMPONENTES = {
- cpu:          { nombre:'Procesador (CPU)',      emoji:'🧠', desc:'Es el cerebro de la computadora. Procesa todas las instrucciones del sistema.',           fun:'💡 ¡Un procesador moderno puede hacer billones de operaciones por segundo!', modelo:'../assets/models/cpu.glb',          escala:0.05,  posInicial:{x:0,y:0,z:0} },
-        ram:          { nombre:'Memoria RAM',           emoji:'💾', desc:'Guarda temporalmente los programas abiertos para que el procesador los use rápido.',      fun:'💡 RAM significa "Random Access Memory" o Memoria de Acceso Aleatorio.',     modelo:'../assets/models/ram.glb',          escala:930,   posInicial:{x:0,y:0,z:0} },
-        gpu:          { nombre:'Tarjeta Gráfica (GPU)', emoji:'🎨', desc:'Procesa y muestra las imágenes en pantalla. Clave para videojuegos y diseño.',            fun:'💡 Las GPU también se usan para entrenar inteligencia artificial.',           modelo:'../assets/models/gpu.glb',          escala:0.35,  posInicial:{x:0,y:0,z:0} },
-        disco_duro:   { nombre:'Disco Duro',            emoji:'💿', desc:'Guarda todos tus archivos y el sistema operativo de forma permanente.',                    fun:'💡 Los SSD son mucho más rápidos que los discos tradicionales.',              modelo:'../assets/models/disco_duro.glb',   escala:0.7,  posInicial:{x:0,y:0,z:0} },
-        psu:          { nombre:'Fuente de Poder (PSU)', emoji:'🔋', desc:'Convierte la electricidad de la pared en energía para todos los componentes.',            fun:'💡 Una buena fuente puede hacer que tu PC dure muchos más años.',            modelo:'../assets/models/psu.glb',          escala:3,  posInicial:{x:0,y:0,z:0} },
-        refrigeracion:{ nombre:'Refrigeración',         emoji:'❄️', desc:'Mantiene fríos al procesador y componentes para que no se dañen por el calor.',           fun:'💡 Algunos gamers usan refrigeración con agua para enfriar sus PCs.',        modelo:'../assets/models/refrigeracion.glb', escala:20, posInicial:{x:0,y:0,z:0} },
-        monitor:      { nombre:'Monitor',               emoji:'🖥️', desc:'La pantalla donde ves todo lo que hace la computadora.',                                  fun:'💡 Los monitores gaming muestran hasta 360 imágenes por segundo.',           modelo:'../assets/models/monitor.glb',      escala:8,  posInicial:{x:0,y:0,z:0} },
-        mouse:        { nombre:'Mouse',                 emoji:'🖱️', desc:'Dispositivo para mover el cursor y hacer clic. Una de las formas de controlar la PC.',   fun:'💡 El primer mouse fue inventado en 1964 y era de madera.',                  modelo:'../assets/models/mouse.glb',        escala:10,  posInicial:{x:0,y:0,z:0} },
+        cpu:          { nombre:'Procesador (CPU)',      emoji:'', imagen:'../assets/img/cpu.png',    desc:'Es el cerebro de la computadora. Procesa todas las instrucciones del sistema.',           fun:' ¡Un procesador moderno puede hacer billones de operaciones por segundo!', modelo:'../assets/models/cpu.glb',          escala:0.05,  posInicial:{x:0,y:0,z:0} },
+        ram:          { nombre:'Memoria RAM',           emoji:'', imagen:'../assets/images/ram.png',           desc:'Guarda temporalmente los programas abiertos para que el procesador los use rápido.',      fun:' RAM significa "Random Access Memory" o Memoria de Acceso Aleatorio.',     modelo:'../assets/models/ram.glb',          escala:930,   posInicial:{x:0,y:0,z:0} },
+        gpu:          { nombre:'Tarjeta Gráfica (GPU)', emoji:'', imagen:'../assets/images/gpu.png',           desc:'Procesa y muestra las imágenes en pantalla. Clave para videojuegos y diseño.',            fun:' Las GPU también se usan para entrenar inteligencia artificial.',           modelo:'../assets/models/gpu.glb',          escala:0.35,  posInicial:{x:0,y:0,z:0} },
+        disco_duro:   { nombre:'Disco Duro',            emoji:'', imagen:'../assets/images/disco_duro.png',    desc:'Guarda todos tus archivos y el sistema operativo de forma permanente.',                    fun:' Los SSD son mucho más rápidos que los discos tradicionales.',              modelo:'../assets/models/disco_duro.glb',   escala:0.7,   posInicial:{x:0,y:0,z:0} },
+        psu:          { nombre:'Fuente de Poder (PSU)', emoji:'', imagen:'../assets/images/psu.png',           desc:'Convierte la electricidad de la pared en energía para todos los componentes.',            fun:' Una buena fuente puede hacer que tu PC dure muchos más años.',            modelo:'../assets/models/psu.glb',          escala:3,     posInicial:{x:0,y:0,z:0} },
+        refrigeracion:{ nombre:'Refrigeración',         emoji:'', imagen:'../assets/images/refrigeracion.png', desc:'Mantiene fríos al procesador y componentes para que no se dañen por el calor.',           fun:' Algunos gamers usan refrigeración con agua para enfriar sus PCs.',        modelo:'../assets/models/refrigeracion.glb', escala:20,   posInicial:{x:0,y:0,z:0} },
+        monitor:      { nombre:'Monitor',               emoji:'', imagen:'../assets/images/monitor.png',       desc:'La pantalla donde ves todo lo que hace la computadora.',                                  fun:' Los monitores gaming muestran hasta 360 imágenes por segundo.',           modelo:'../assets/models/monitor.glb',      escala:8,     posInicial:{x:0,y:0,z:0} },
+        mouse:        { nombre:'Mouse',                 emoji:'', imagen:'../assets/images/mouse.png',         desc:'Dispositivo para mover el cursor y hacer clic. Una de las formas de controlar la PC.',   fun:' El primer mouse fue inventado en 1964 y era de madera.',                  modelo:'../assets/models/mouse.glb',        escala:10,    posInicial:{x:0,y:0,z:0} },
     };
 
     let scene, camera, renderer, orbitControls;
@@ -257,7 +260,7 @@
     // ── Guardar / Restaurar avance en sesión ────────────────────────────────
     function guardarAvance() {
         const perfilRaw = localStorage.getItem('perfilActivo');
-        if (!perfilRaw) { alert('⚠️ No hay perfil activo. Vuelve a seleccionar tu perfil.'); return; }
+        if (!perfilRaw) { alert(' No hay perfil activo. Vuelve a seleccionar tu perfil.'); return; }
         const perfil = JSON.parse(perfilRaw);
 
         // Serializar posición y rotación de cada grupo cargado
@@ -296,7 +299,7 @@
         const btn = document.querySelector('[onclick="guardarAvance()"]');
         if (btn) {
             const textoOrig = btn.innerHTML;
-            btn.innerHTML = '✅ ¡Guardado!';
+            btn.innerHTML = '¡Guardado!';
             btn.disabled = true;
             setTimeout(() => { btn.innerHTML = textoOrig; btn.disabled = false; }, 1800);
         }
@@ -443,9 +446,9 @@
             document.getElementById('paso-desc').innerHTML =
                 'Coloca el <strong>' + c.nombre + ' ' + c.emoji + '</strong> en su lugar correcto de la placa base. ¡Arrástralo y encájalo!';
         } else {
-            document.getElementById('paso-num').textContent   = '🎉';
+            document.getElementById('paso-num').textContent   = '';
             document.getElementById('paso-titulo').textContent = '¡Todo listo!';
-            document.getElementById('paso-desc').innerHTML    = '¡Felicidades! Ensamblaste todos los componentes correctamente. <strong>¡Eres un pro! 🚀</strong>';
+            document.getElementById('paso-desc').innerHTML    = '¡Felicidades! Ensamblaste todos los componentes correctamente. <strong>¡Eres un pro! </strong>';
             // Mostrar ventana de felicitaciones (solo una vez)
             if (!window._felizMostrado) {
                 window._felizMostrado = true;
@@ -469,7 +472,7 @@
     const PREGUNTAS = [
         {
             pregunta: '¿Cuál es el componente conocido como el "cerebro" de la computadora?',
-            opciones: ['Memoria RAM 💾', 'Procesador (CPU) 🧠', 'Tarjeta Gráfica 🎨', 'Fuente de Poder 🔋'],
+            opciones: ['Memoria RAM ', 'Procesador (CPU) ', 'Tarjeta Gráfica ', 'Fuente de Poder '],
             correcta: 1
         },
         {
@@ -479,12 +482,12 @@
         },
         {
             pregunta: '¿Qué componente convierte la electricidad de la pared en energía para la PC?',
-            opciones: ['Tarjeta Gráfica 🎨', 'Disco Duro 💿', 'Refrigeración ❄️', 'Fuente de Poder 🔋'],
+            opciones: ['Tarjeta Gráfica', 'Disco Duro ', 'Refrigeración ', 'Fuente de Poder '],
             correcta: 3
         },
         {
             pregunta: '¿Cuál componente guarda todos tus archivos y el sistema operativo de forma permanente?',
-            opciones: ['Memoria RAM 💾', 'Procesador (CPU) 🧠', 'Disco Duro 💿', 'Monitor 🖥️'],
+            opciones: ['Memoria RAM', 'Procesador (CPU)', 'Disco Duro', 'Monitor'],
             correcta: 2
         },
         {
@@ -542,7 +545,7 @@
 
     function enviarQuiz() {
         if (Object.keys(respuestasUsuario).length < PREGUNTAS.length) {
-            alert('¡Responde todas las preguntas antes de enviar! 😊');
+            alert('¡Responde todas las preguntas antes de enviar!');
             return;
         }
         let aciertos = 0;
@@ -550,14 +553,14 @@
         PREGUNTAS.forEach((p, i) => {
             const ok = respuestasUsuario[i] === p.correcta;
             if (ok) aciertos++;
-            detalle += `<div>${ok ? '✅' : '❌'} <strong>P${i+1}:</strong> ${ok ? 'Correcto' : 'Incorrecto — era: <em>' + p.opciones[p.correcta] + '</em>'}</div>`;
+            detalle += `<div>${ok ? '' : ''} <strong>P${i+1}:</strong> ${ok ? 'Correcto' : 'Incorrecto — era: <em>' + p.opciones[p.correcta] + '</em>'}</div>`;
         });
 
         const pct = Math.round((aciertos / PREGUNTAS.length) * 100);
         let emoji, titulo, desc;
-        if (pct === 100)      { emoji='🏆'; titulo='¡Perfecto!';        desc='¡Respondiste todo correcto! Eres un experto en computadoras.'; }
-        else if (pct >= 60)   { emoji='🌟'; titulo='¡Muy bien!';        desc=`${aciertos} de ${PREGUNTAS.length} correctas. ¡Casi eres un experto!`; }
-        else                  { emoji='💪'; titulo='¡Sigue practicando!'; desc=`${aciertos} de ${PREGUNTAS.length} correctas. Repasa los componentes e inténtalo de nuevo.`; }
+        if (pct === 100)      { emoji=''; titulo='¡Perfecto!';        desc='¡Respondiste todo correcto! Eres un experto en computadoras.'; }
+        else if (pct >= 60)   { emoji=''; titulo='¡Muy bien!';        desc=`${aciertos} de ${PREGUNTAS.length} correctas. ¡Casi eres un experto!`; }
+        else                  { emoji=''; titulo='¡Sigue practicando!'; desc=`${aciertos} de ${PREGUNTAS.length} correctas. Repasa los componentes e inténtalo de nuevo.`; }
 
         document.getElementById('res-emoji').textContent   = emoji;
         document.getElementById('res-titulo').textContent  = titulo;
@@ -570,6 +573,7 @@
 
     function cerrarTodo() {
         document.getElementById('modal-resultado').style.display = 'none';
+        window.location.href = 'menu.html';
     }
 
     // ── Modal ────────────────────────────────────────────────────────────────
@@ -579,14 +583,26 @@
             const previos = ORDEN_VALIDABLES.filter(k => !SOLO_BOTON.has(k));
             const todosListo = previos.every(k => colocadosOk.has(k));
             if (!todosListo) {
-                alert('⚠️ Primero coloca todos los demás componentes correctamente antes de agregar el ' + COMPONENTES[clave].nombre + '.');
+                alert(' Primero coloca todos los demás componentes correctamente antes de agregar el ' + COMPONENTES[clave].nombre + '.');
                 return;
             }
         }
         const c = COMPONENTES[clave];
         if (!c) return;
         componentePendiente = clave;
-        document.getElementById('modal-emoji').textContent  = c.emoji;
+        // Mostrar imagen si existe, si no mostrar emoji
+        const imgEl = document.getElementById('modal-emoji-img');
+        const txtEl = document.getElementById('modal-emoji-txt');
+        if (c.imagen) {
+            imgEl.src = c.imagen;
+            imgEl.alt = c.nombre;
+            imgEl.style.display = 'block';
+            txtEl.style.display = 'none';
+        } else {
+            imgEl.style.display = 'none';
+            txtEl.textContent = c.emoji;
+            txtEl.style.display = 'inline';
+        }
         document.getElementById('modal-titulo').textContent = c.nombre;
         document.getElementById('modal-desc').textContent   = c.desc;
         document.getElementById('modal-fun').textContent    = c.fun;
