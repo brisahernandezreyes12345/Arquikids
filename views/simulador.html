@@ -26,7 +26,7 @@
             <span>Simulador de Ensamble</span>
         </div>
         <div class="flex items-center gap-4">
-            <div class="bg-yellow-400 bg-opacity-20 text-yellow-600 px-4 py-1 rounded-full font-bold flex items-center gap-1">⭐ 0 pts</div>
+            <div id="badge-puntos" class="bg-yellow-400 bg-opacity-20 text-yellow-600 px-4 py-1 rounded-full font-bold flex items-center gap-1" style="transition:transform 0.2s;">⭐ <span id="puntos-display">0</span> pts</div>
             <div class="bg-blue-100 p-1 rounded-full border-2 border-white shadow-sm">
                 <img src="https://img.icons8.com/bubbles/100/000000/robot.png" class="w-10 h-10">
             </div>
@@ -37,11 +37,22 @@
         <div class="col-span-12 lg:col-span-4 flex flex-col gap-6">
             <div class="bg-blue-600 rounded-[2.5rem] p-8 text-white shadow-xl">
                 <div class="flex items-center gap-4 mb-6">
-                    <div class="bg-white text-blue-600 w-10 h-10 rounded-full flex items-center justify-center font-bold text-xl">2</div>
-                    <h2 class="text-2xl font-bold">Paso 2 de 4</h2>
+                    <div id="paso-num" class="bg-white text-blue-600 w-10 h-10 rounded-full flex items-center justify-center font-bold text-xl">1</div>
+                    <h2 id="paso-titulo" class="text-2xl font-bold">Paso 1 de 5</h2>
                 </div>
-                <div class="bg-blue-500 bg-opacity-40 p-6 rounded-3xl mb-6">
-                    <p class="text-lg leading-snug">¡Ahora sí! Arrastra cualquier pieza, suéltala y elige otra. ¡Todas son movibles!</p>
+                <div class="bg-blue-500 bg-opacity-40 p-6 rounded-3xl mb-5">
+                    <p id="paso-desc" class="text-lg leading-snug">¡Empieza colocando el <strong>Procesador (CPU) 🧠</strong> en su lugar de la placa base!</p>
+                </div>
+                <!-- Barra de progreso -->
+                <div>
+                    <div class="flex justify-between text-sm font-bold mb-2" style="opacity:0.9;">
+                        <span>Progreso de ensamble</span>
+                        <span id="paso-fraccion">0 / 5</span>
+                    </div>
+                    <div class="rounded-full overflow-hidden" style="background:rgba(255,255,255,0.2);height:18px;">
+                        <div id="barra-avance" style="height:18px;width:0%;background:linear-gradient(90deg,#4ade80,#22c55e);border-radius:999px;transition:width 0.7s cubic-bezier(.4,0,.2,1);"></div>
+                    </div>
+                    <div id="chips-completados" class="flex flex-wrap gap-2 mt-3 min-h-[28px]"></div>
                 </div>
             </div>
 
@@ -155,6 +166,59 @@
     let componentePendiente = null;
     const container = document.getElementById('canvas-3d');
 
+    // ── Puntos y progreso ────────────────────────────────────────────────────
+    let puntos = 0;
+    const colocadosOk = new Set(); // claves ya colocadas correctamente
+
+    // Componentes que tienen zona definida, en orden (cpu siempre primero)
+    const ORDEN_VALIDABLES = ['cpu','ram','gpu','disco_duro','psu'];
+    const TOTAL = ORDEN_VALIDABLES.length;
+
+    function siguienteSugerido() {
+        for (const k of ORDEN_VALIDABLES) {
+            if (!colocadosOk.has(k)) return k;
+        }
+        return null;
+    }
+
+    function actualizarUI() {
+        const n = colocadosOk.size;
+        const pct = TOTAL > 0 ? (n / TOTAL) * 100 : 0;
+
+        // Puntos
+        document.getElementById('puntos-display').textContent = puntos;
+
+        // Barra
+        document.getElementById('barra-avance').style.width = pct + '%';
+        document.getElementById('paso-fraccion').textContent = n + ' / ' + TOTAL;
+
+        // Chips
+        const chips = document.getElementById('chips-completados');
+        chips.innerHTML = '';
+        colocadosOk.forEach(k => {
+            const c = COMPONENTES[k];
+            const s = document.createElement('span');
+            s.style.cssText = 'background:rgba(255,255,255,0.22);border-radius:999px;padding:2px 12px;font-size:12px;font-weight:700;';
+            s.textContent = (c.emoji||'') + ' ✓';
+            chips.appendChild(s);
+        });
+
+        // Paso
+        const sig = siguienteSugerido();
+        if (sig) {
+            const c = COMPONENTES[sig];
+            const num = n + 1;
+            document.getElementById('paso-num').textContent  = num;
+            document.getElementById('paso-titulo').textContent = 'Paso ' + num + ' de ' + TOTAL;
+            document.getElementById('paso-desc').innerHTML =
+                'Coloca el <strong>' + c.nombre + ' ' + c.emoji + '</strong> en su lugar correcto de la placa base. ¡Arrástralo y encájalo!';
+        } else {
+            document.getElementById('paso-num').textContent   = '🎉';
+            document.getElementById('paso-titulo').textContent = '¡Todo listo!';
+            document.getElementById('paso-desc').innerHTML    = '¡Felicidades! Ensamblaste todos los componentes correctamente. <strong>¡Eres un pro! 🚀</strong>';
+        }
+    }
+
     // ── Modal ────────────────────────────────────────────────────────────────
     function abrirModal(clave) {
         const c = COMPONENTES[clave];
@@ -190,7 +254,7 @@
     function validarPosicion(grupo) {
         const clave = grupoClave.get(grupo);
         const zona  = clave ? ZONAS[clave] : null;
-        if (!zona) return; // sin zona definida, no valida
+        if (!zona) return;
 
         const p    = grupo.position;
         const dist = Math.sqrt(
@@ -204,7 +268,6 @@
         grupo.traverse(obj => {
             if (!obj.isMesh) return;
             if (!obj.userData.matOriginal) {
-                // Guardar material original la primera vez
                 obj.userData.matOriginal = obj.material;
             }
             if (correcto) {
@@ -213,6 +276,17 @@
                 obj.material = new THREE.MeshStandardMaterial({ color: 0xef4444, transparent: true, opacity: 0.85 });
             }
         });
+
+        // Sumar 100 pts la primera vez que se coloca bien
+        if (correcto && !colocadosOk.has(clave)) {
+            colocadosOk.add(clave);
+            puntos += 100;
+            // Animación pop en el badge
+            const badge = document.getElementById('badge-puntos');
+            badge.style.transform = 'scale(1.35)';
+            setTimeout(() => { badge.style.transform = 'scale(1)'; }, 300);
+            actualizarUI();
+        }
     }
 
     function restaurarMaterial(grupo) {
@@ -339,7 +413,7 @@
         if (renderer && scene && camera) renderer.render(scene, camera);
     }
 
-    window.addEventListener('load', init3D);
+    window.addEventListener('load', () => { init3D(); actualizarUI(); });
     window.addEventListener('resize', () => {
         if (!camera || !renderer) return;
         camera.aspect = container.clientWidth / container.clientHeight;
