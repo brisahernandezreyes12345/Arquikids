@@ -73,8 +73,8 @@ async def obtener_usuario(id_usuario: int):
 
 @router.post("/usuarios")
 async def crear_usuario(usuario: UsuarioCreate):
+    conn = get_db_connection()
     try:
-        conn = get_db_connection()
         cursor = conn.cursor()
         cursor.execute(
             'INSERT INTO Usuario (nickname, avatar, puntosAcumulados) VALUES (?, ?, 0)',
@@ -82,10 +82,12 @@ async def crear_usuario(usuario: UsuarioCreate):
         )
         conn.commit()
         nuevo_id = cursor.lastrowid
-        conn.close()
         return {"id_usuario": nuevo_id, "nickname": usuario.nickname, "avatar": usuario.avatar, "puntosAcumulados": 0}
     except Exception as e:
+        conn.rollback() 
         raise HTTPException(status_code=500, detail=f"Error al crear usuario: {str(e)}")
+    finally:
+        conn.close()
 
 @router.patch("/usuarios/{id_usuario}/puntos")
 async def actualizar_puntos(id_usuario: int, datos: PuntosUpdate):
