@@ -8,18 +8,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Outfit', sans-serif; }
-        .bg-gradient-blue-custom {
-            background: radial-gradient(circle at center, #2563eb 0%, #1e40af 100%);
-        }
-        .btn-play-gradient {
-            background: linear-gradient(to right, #3b82f6, #2563eb);
-        }
-        .card-shadow { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
-        .avatar-selected {
-            background-color: #dbeafe; 
-            border: 3px solid #3b82f6;
-            transform: scale(1.1);
-        }
+        .bg-gradient-blue-custom { background: radial-gradient(circle at center, #2563eb 0%, #1e40af 100%); }
+        .btn-play-gradient { background: linear-gradient(to right, #3b82f6, #2563eb); }
+        .card-shadow { box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .spinner { border:4px solid rgba(255,255,255,0.3); border-top-color:white; border-radius:50%; width:40px; height:40px; animation:spin 0.8s linear infinite; }
+        @keyframes slideIn { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+        .card-in { animation: slideIn 0.3s ease forwards; }
     </style>
 </head>
 <body class="bg-gradient-blue-custom min-h-screen p-4 md:p-8">
@@ -27,7 +22,7 @@
     <div class="max-w-7xl mx-auto mb-6">
         <a href="index.html" class="text-white font-bold flex items-center gap-2 hover:opacity-80 transition-opacity">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+                <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd"/>
             </svg>
             Volver
         </a>
@@ -35,172 +30,166 @@
 
     <div class="text-center mb-12 text-white">
         <h1 class="text-6xl font-bold mb-2">Selecciona tu Perfil</h1>
-        <p class="text-xl opacity-90">¿Quién va a jugar hoy? </p>
+        <p class="text-xl opacity-90">¿Quién va a jugar hoy? 😊</p>
     </div>
 
-    <div id="contenedor-perfiles" class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        
-        <div class="bg-white rounded-[2rem] p-6 card-shadow flex flex-col items-center">
-            <img src="img/zorrillo.png" class="w-32 h-32 mb-2">
-            <h2 class="text-2xl font-bold text-gray-800">Brisa</h2>
-            <p id="puntos-Brisa" class="text-yellow-500 font-bold mb-4 flex items-center gap-1">⭐ 0 puntos</p>
-            <div class="grid grid-cols-3 gap-2 w-full mb-6">
-                <div class="bg-blue-50 p-2 rounded-xl text-center">
-                    <p id="ensambles-Brisa" class="text-xs font-bold text-gray-400">0</p>
-                    <p class="text-[10px] text-gray-500 uppercase">Ensambles</p>
-                </div>
-                <div class="bg-blue-50 p-2 rounded-xl text-center">
-                    <p id="logros-Brisa" class="text-xs font-bold text-gray-400">0</p>
-                    <p class="text-[10px] text-gray-500 uppercase">Logros</p>
-                </div>
-                <div class="bg-blue-50 p-2 rounded-xl text-center">
-                    <p id="tiempo-Brisa" class="text-xs font-bold text-gray-400">--:--</p>
-                    <p class="text-[10px] text-gray-500 uppercase">Mejor ⏱️</p>
-                </div>
-            </div>
-            <button onclick="seleccionarPerfil('Brisa', 'https://img.icons8.com/bubbles/200/robot-vacuum.png')" class="w-full btn-play-gradient text-white py-3 rounded-xl font-bold flex items-center justify-center gap-2 hover:opacity-90">
-                Jugar
-            </button>
-        </div>
-
-        <div class="bg-white rounded-[2rem] p-6 card-shadow flex flex-col items-center">
-            <img src="img/puerco.png" class="w-32 h-32 mb-2">
-            <h2 class="text-2xl font-bold text-gray-800">Luis</h2>
-            <p id="puntos-Luis" class="text-yellow-500 font-bold mb-4 flex items-center gap-1">⭐ 0 puntos</p>
-            <div class="grid grid-cols-3 gap-2 w-full mb-6">
-                <div class="bg-blue-50 p-2 rounded-xl text-center">
-                    <p id="ensambles-Luis" class="text-xs font-bold text-gray-400">0</p>
-                    <p class="text-[10px] text-gray-500 uppercase">Ensambles</p>
-                </div>
-                <div class="bg-blue-50 p-2 rounded-xl text-center">
-                    <p id="logros-Luis" class="text-xs font-bold text-gray-400">0</p>
-                    <p class="text-[10px] text-gray-500 uppercase">Logros</p>
-                </div>
-                <div class="bg-blue-50 p-2 rounded-xl text-center">
-                    <p id="tiempo-Luis" class="text-xs font-bold text-gray-400">--:--</p>
-                    <p class="text-[10px] text-gray-500 uppercase">Mejor ⏱️</p>
-                </div>
-            </div>
-            <button onclick="seleccionarPerfil('Luis', 'https://img.icons8.com/bubbles/200/skull.png')" class="w-full btn-play-gradient text-white py-3 rounded-xl font-bold flex items-center justify-center gap-2 hover:opacity-90">
-                Jugar
-            </button>
-        </div>
-
-        <div id="new-profile-card" class="bg-white bg-opacity-20 border-4 border-dashed border-white rounded-[2rem] p-6 flex flex-col items-center justify-center cursor-pointer transition-all duration-300 min-h-[350px]">
-            <div id="plus-content" onclick="abrirFormulario()" class="flex flex-col items-center w-full">
-                <span class="text-8xl text-white font-light mb-4">+</span>
-                <p class="text-white text-2xl font-bold">Nuevo Perfil</p>
-            </div>
-
-            <div id="form-content" class="hidden w-full">
-                <h3 class="text-blue-700 text-xl font-bold text-center mb-4">Crear Nuevo Perfil</h3>
-                <input type="text" id="nickname" placeholder="Tu nombre" class="w-full p-3 bg-blue-50 border border-blue-200 rounded-xl mb-4 text-gray-700 outline-none focus:ring-2 focus:ring-blue-400">
-                <p class="text-blue-700 text-sm font-bold mb-2 text-center">Elige tu avatar:</p>
-                <div class="grid grid-cols-4 gap-2 mb-6">
-                    <img onclick="selectAvatar(this)" src="img/mapache.png" class="w-full aspect-square cursor-pointer rounded-lg hover:bg-blue-100 transition-all p-1">
-                    <img onclick="selectAvatar(this)" src="img/buho.png" class="w-full aspect-square cursor-pointer rounded-lg hover:bg-blue-100 transition-all p-1">
-                    <img onclick="selectAvatar(this)" src="img/ardilla.png" class="w-full aspect-square cursor-pointer rounded-lg hover:bg-blue-100 transition-all p-1">
-                    <img onclick="selectAvatar(this)" src="img/puerco.png" class="w-full aspect-square cursor-pointer rounded-lg hover:bg-blue-100 transition-all p-1">
-                    <img onclick="selectAvatar(this)" src="img/zorrillo.png" class="w-full aspect-square cursor-pointer rounded-lg hover:bg-blue-100 transition-all p-1">
-                    <img onclick="selectAvatar(this)" src="img/rata.png" class="w-full aspect-square cursor-pointer rounded-lg hover:bg-blue-100 transition-all p-1">
-                    <img onclick="selectAvatar(this)" src="img/conejo.png" class="w-full aspect-square cursor-pointer rounded-lg hover:bg-blue-100 transition-all p-1">
-                    <img onclick="selectAvatar(this)" src="img/lobo.png" class="w-full aspect-square cursor-pointer rounded-lg hover:bg-blue-100 transition-all p-1">
-                </div>
-                <div class="flex gap-2">
-                    <button onclick="crearPerfil()" class="flex-1 bg-blue-600 text-white py-2 rounded-xl font-bold hover:bg-blue-700">Crear</button>
-                    <button onclick="cerrarFormulario()" class="flex-1 bg-white border border-gray-200 text-gray-500 py-2 rounded-xl font-bold hover:bg-gray-50">Cancelar</button>
-                </div>
-            </div>
-        </div>
+    <div id="profiles-container" class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="col-span-3 flex justify-center items-center py-20"><div class="spinner"></div></div>
     </div>
 
     <script>
+        const AVATARES = [
+            '/static/img/ardilla.png',
+            '/static/img/buho.png',
+            '/static/img/conejo.png',
+            '/static/img/lobo.png',
+            '/static/img/mapache.png',
+            '/static/img/puerco.png',
+            '/static/img/rata.png',
+            '/static/img/zorrillo.png'
+        ];
         let avatarElegido = null;
-        const card = document.getElementById('new-profile-card');
 
-        // ── Utilidad: formatear segundos → MM:SS ──────────────────────────────
-        function formatearTiempo(seg) {
-            if (seg === '--' || seg === undefined || seg === null) return '--:--';
-            const m = String(Math.floor(seg / 60)).padStart(2, '0');
-            const s = String(seg % 60).padStart(2, '0');
-            return m + ':' + s;
+        function escapeHTML(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+        function seleccionarUsuario(usuario) {
+            localStorage.setItem('arquikids_usuario', JSON.stringify(usuario));
+            window.location.href = 'menu.html';
         }
 
-        // ── Cargar stats de un perfil en su tarjeta ───────────────────────────
-        function cargarStats(nombre) {
-            const guardado = localStorage.getItem(`perfil_${nombre}`);
-            if (!guardado) return;
-            const data = JSON.parse(guardado);
-            const el = (id) => document.getElementById(id);
-            if (el(`puntos-${nombre}`))    el(`puntos-${nombre}`).innerHTML    = `⭐ ${data.puntos || 0} puntos`;
-            if (el(`ensambles-${nombre}`)) el(`ensambles-${nombre}`).innerText = data.ensambles || 0;
-            if (el(`logros-${nombre}`))    el(`logros-${nombre}`).innerText    = data.logros || 0;
-            if (el(`tiempo-${nombre}`))    el(`tiempo-${nombre}`).innerText    = formatearTiempo(data.mejorTiempo);
+        async function crearTarjetaPerfil(u) {
+            // Cargar stats del usuario
+            let stats = { ensambles: 0, logros: 0, puntos: u.puntosAcumulados };
+            try {
+                const r = await fetch(`/api/usuarios/${u.id_usuario}/stats`);
+                if (r.ok) stats = await r.json();
+            } catch {}
+
+            const avatar = u.avatar || AVATARES[0];
+            const div = document.createElement('div');
+            div.className = 'card-in bg-white rounded-[2rem] p-6 card-shadow flex flex-col items-center min-h-[350px]';
+            div.innerHTML = `
+                <img src="${avatar}" alt="Avatar" class="w-20 h-20 rounded-lg object-contain border-2 border-transparent mb-4">
+                <h2 class="text-2xl font-bold text-gray-800">${escapeHTML(u.nickname)}</h2>
+                <p class="text-yellow-500 font-bold mb-4 flex items-center gap-1">⭐ ${stats.puntos} puntos</p>
+                <div class="grid grid-cols-2 gap-2 w-full mb-6">
+                    <div class="bg-blue-50 p-2 rounded-xl text-center">
+                        <p class="text-sm font-bold text-blue-700">${stats.ensambles}</p>
+                        <p class="text-[10px] text-gray-500 uppercase">Ensambles</p>
+                    </div>
+                    <div class="bg-blue-50 p-2 rounded-xl text-center">
+                        <p class="text-sm font-bold text-blue-700">${stats.logros}</p>
+                        <p class="text-[10px] text-gray-500 uppercase">Logros</p>
+                    </div>
+                </div>
+                <div class="flex gap-2 w-full mt-auto">
+                    <button onclick='seleccionarUsuario(${JSON.stringify(u).replace(/'/g,"&#39;")})' class="flex-1 btn-play-gradient text-white py-3 rounded-xl font-bold flex items-center justify-center gap-2 hover:opacity-90">
+                        ▶ Jugar
+                    </button>
+                    <button onclick="eliminarPerfil(${u.id_usuario})" class="bg-red-500 p-3 rounded-xl text-white hover:bg-red-600 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                        </svg>
+                    </button>
+                </div>`;
+            return div;
         }
 
-        window.addEventListener('load', () => {
-            const nombres = ['Brisa', 'Luis'];
-            nombres.forEach(nombre => cargarStats(nombre));
-        });
+        function crearTarjetaNuevoPerfil() {
+            const div = document.createElement('div');
+            div.id = 'new-profile-card';
+            div.className = 'bg-white bg-opacity-20 border-4 border-dashed border-white rounded-[2rem] p-6 flex flex-col items-center justify-center cursor-pointer hover:bg-opacity-30 transition-all min-h-[350px]';
+            div.innerHTML = `
+                <div id="plus-content" onclick="abrirFormulario()" class="flex flex-col items-center">
+                    <span class="text-8xl text-white font-light mb-4">+</span>
+                    <p class="text-white text-2xl font-bold">Nuevo Perfil</p>
+                </div>
+                <div id="form-content" class="hidden w-full">
+                    <h3 class="text-blue-700 text-xl font-bold text-center mb-4">Crear Nuevo Perfil</h3>
+                    <input type="text" id="nickname" placeholder="Tu nombre" maxlength="20"
+                        class="w-full p-3 bg-blue-50 rounded-xl mb-4 text-gray-700 outline-none focus:ring-2 focus:ring-blue-400">
+                    <p class="text-blue-700 text-sm font-bold mb-2 text-center">Elige tu avatar:</p>
+                    <div class="grid grid-cols-4 gap-2 mb-6" id="avatar-grid">
+                        ${AVATARES.map(u => `<img onclick="selectAvatar(this,'${u}')" src="${u}" class="w-20 h-20 object-contain cursor-pointer rounded-2xl transition-all ring-4 ring-transparent hover:ring-blue-200">`).join('')}
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="guardarPerfil()" class="flex-1 bg-blue-600 text-white py-2 rounded-xl font-bold hover:bg-blue-700">Crear</button>
+                        <button onclick="cerrarFormulario()" class="flex-1 bg-white border border-gray-200 text-gray-500 py-2 rounded-xl font-bold hover:bg-gray-50">Cancelar</button>
+                    </div>
+                </div>`;
+            return div;
+        }
+
+        async function cargarPerfiles() {
+            const container = document.getElementById('profiles-container');
+            container.innerHTML = '<div class="col-span-3 flex justify-center items-center py-20"><div class="spinner"></div></div>';
+            try {
+                const res = await fetch('/api/usuarios');
+                if (!res.ok) throw new Error(`Error HTTP ${res.status}`);
+                const usuarios = await res.json();
+                container.innerHTML = '';
+                // Cargar tarjetas con stats en paralelo
+                const tarjetas = await Promise.all(usuarios.map(u => crearTarjetaPerfil(u)));
+                tarjetas.forEach(t => container.appendChild(t));
+                container.appendChild(crearTarjetaNuevoPerfil());
+            } catch(err) {
+                container.innerHTML = `<div class="col-span-3 text-center text-white py-10">
+                    <p class="text-2xl font-bold mb-2">⚠️ No se pudieron cargar los perfiles</p>
+                    <p class="opacity-80 mb-4">${err.message}</p>
+                    <button onclick="cargarPerfiles()" class="bg-white text-blue-700 font-bold px-6 py-2 rounded-xl hover:bg-blue-50">Reintentar</button>
+                </div>`;
+            }
+        }
+
+        async function guardarPerfil() {
+            const nombre = document.getElementById('nickname').value.trim();
+            if (!nombre) { alert('Por favor escribe tu nombre'); return; }
+            if (!avatarElegido) { alert('Por favor elige un avatar'); return; }
+            try {
+                const res = await fetch('/api/usuarios', {
+                    method: 'POST',
+                    headers: {'Content-Type':'application/json'},
+                    body: JSON.stringify({ nickname: nombre, avatar: avatarElegido })
+                });
+                if (!res.ok) { const e = await res.json(); throw new Error(e.detail||'Error'); }
+                avatarElegido = null;
+                await cargarPerfiles();
+            } catch(err) { alert('❌ '+err.message); }
+        }
+
+        async function eliminarPerfil(id) {
+            if (!confirm('¿Seguro que quieres eliminar este perfil?')) return;
+            try {
+                const res = await fetch(`/api/usuarios/${id}`, { method: 'DELETE' });
+                if (!res.ok) { const e = await res.json(); throw new Error(e.detail||'Error'); }
+                await cargarPerfiles();
+            } catch(err) { alert('❌ '+err.message); }
+        }
 
         function abrirFormulario() {
             document.getElementById('plus-content').classList.add('hidden');
             document.getElementById('form-content').classList.remove('hidden');
-            card.classList.remove('bg-opacity-20', 'border-dashed', 'border-white', 'cursor-pointer');
-            card.classList.add('bg-opacity-100', 'card-shadow');
+            const c = document.getElementById('new-profile-card');
+            c.classList.remove('bg-opacity-20', 'border-dashed', 'hover:bg-opacity-30');
+            c.classList.add('bg-white', 'bg-opacity-100');
         }
-
         function cerrarFormulario() {
             document.getElementById('form-content').classList.add('hidden');
             document.getElementById('plus-content').classList.remove('hidden');
-            card.classList.add('bg-opacity-20', 'border-dashed', 'border-white', 'cursor-pointer');
-            card.classList.remove('bg-opacity-100', 'card-shadow');
+            const c = document.getElementById('new-profile-card');
+            c.classList.add('bg-opacity-20', 'border-dashed', 'hover:bg-opacity-30');
+            c.classList.remove('bg-white', 'bg-opacity-100');
             avatarElegido = null;
         }
-
-        function selectAvatar(el) {
-            document.querySelectorAll('#form-content img').forEach(img => img.classList.remove('avatar-selected'));
-            el.classList.add('avatar-selected');
-            avatarElegido = el.src;
+        function selectAvatar(el, url) {
+            document.querySelectorAll('#avatar-grid img').forEach(i => {
+                i.classList.remove('ring-blue-600');
+            });
+            el.classList.add('ring-blue-600');
+            avatarElegido = url;
         }
 
-        function seleccionarPerfil(nombre, avatar) {
-            let perfilData = localStorage.getItem(`perfil_${nombre}`);
-            if (!perfilData) {
-                perfilData = {
-                    nombre: nombre,
-                    avatar: avatar,
-                    puntos: 0,
-                    ensambles: 0,
-                    logros: 0,
-                    mejorTiempo: '--'
-                };
-                localStorage.setItem(`perfil_${nombre}`, JSON.stringify(perfilData));
-            } else {
-                perfilData = JSON.parse(perfilData);
-            }
-            localStorage.setItem('perfilActivo', JSON.stringify(perfilData));
-            window.location.href = "menu.html";
-        }
-
-        function crearPerfil() {
-            const nombre = document.getElementById('nickname').value.trim();
-            if (nombre && avatarElegido) {
-                const datosUsuario = {
-                    nombre: nombre,
-                    avatar: avatarElegido,
-                    puntos: 0,
-                    ensambles: 0,
-                    logros: 0,
-                    mejorTiempo: '--'
-                };
-                localStorage.setItem(`perfil_${nombre}`, JSON.stringify(datosUsuario));
-                localStorage.setItem('perfilActivo', JSON.stringify(datosUsuario));
-                window.location.href = "menu.html"; 
-            } else {
-                alert("¡No olvides tu nombre y elegir un avatar! ");
-            }
-        }
+        cargarPerfiles();
     </script>
 </body>
 </html>

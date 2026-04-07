@@ -9,7 +9,9 @@
         body { font-family: 'Outfit', sans-serif; }
         .bg-gradient-blue { background: radial-gradient(circle at center, #f8fafc 0%, #e2e8f0 100%); }
         .card-adventure { transition: all 0.3s ease; }
-        .card-adventure:hover { transform: translateY(-10px); box-shadow: 0 20px 25px -5px rgba(37, 99, 235, 0.2); }
+        .card-adventure:hover { transform: translateY(-10px); box-shadow: 0 20px 25px -5px rgba(37,99,235,0.2); }
+        @keyframes countUp { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+        .stat-val { animation: countUp 0.5s ease forwards; }
     </style>
 </head>
 <body class="bg-gradient-blue min-h-screen p-6">
@@ -18,24 +20,24 @@
         <a href="perfil.html" class="text-blue-600 font-bold flex items-center gap-2 hover:underline">
             ← Cambiar Perfil
         </a>
-        <div class="bg-blue-600 text-white px-6 py-2 rounded-full flex items-center gap-4 shadow-lg">
-            <img src="https://img.icons8.com/bubbles/100/000000/robot.png" class="w-10 h-10 bg-white rounded-full">
+        <div id="user-badge" class="bg-blue-600 text-white px-6 py-2 rounded-full flex items-center gap-4 shadow-lg">
+            <img id="user-avatar" src="https://img.icons8.com/bubbles/100/000000/robot.png" class="w-10 h-10 bg-white rounded-full">
             <div class="text-left">
-                <p class="font-bold leading-none">Luich</p>
-                <p class="text-xs text-blue-200">⭐ 0 puntos</p>
+                <p id="user-name" class="font-bold leading-none">Cargando...</p>
+                <p id="user-points" class="text-xs text-blue-200">⭐ 0 puntos</p>
             </div>
         </div>
     </div>
 
     <div class="max-w-6xl mx-auto text-center">
         <h1 class="text-blue-700 text-6xl font-bold mb-4 tracking-tight">¿Qué quieres hacer hoy?</h1>
-        <p class="text-blue-500 text-2xl mb-12 font-light">¡Elige una aventura! </p>
+        <p class="text-blue-500 text-2xl mb-12 font-light">¡Elige una aventura! 🚀</p>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
             <a href="catalogo.html" class="card-adventure bg-blue-500 rounded-[40px] p-12 text-white flex flex-col items-center group">
                 <div class="mb-6 p-6 bg-blue-400 bg-opacity-30 rounded-full">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                     </svg>
                 </div>
                 <h3 class="text-3xl font-bold mb-2">Ver Catálogo</h3>
@@ -43,11 +45,10 @@
                 <div class="bg-white text-blue-600 px-8 py-2 rounded-full font-bold group-hover:bg-blue-50 transition-colors">Ir →</div>
             </a>
 
-            <a href="simulador.html" class="card-adventure bg-blue-700 rounded-[40px] p-12 text-white flex flex-col items-center group cursor-pointer">
+            <a href="simulador.html" class="card-adventure bg-blue-700 rounded-[40px] p-12 text-white flex flex-col items-center group">
                 <div class="mb-6 p-6 bg-blue-600 bg-opacity-30 rounded-full">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path d="M12 14l9-5-9-5-9 5 9 5z" />
-                        <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/>
                     </svg>
                 </div>
                 <h3 class="text-3xl font-bold mb-2">Simulador de Ensamble</h3>
@@ -56,38 +57,58 @@
             </a>
         </div>
 
+        <!-- Stats desde la API -->
         <div class="grid grid-cols-3 gap-4">
             <div class="bg-blue-500 text-white p-6 rounded-3xl shadow-md">
-                <p id="stat-ensambles" class="text-3xl font-bold">0</p>
+                <p id="stat-ensambles" class="stat-val text-3xl font-bold">—</p>
                 <p class="text-xs uppercase tracking-widest font-bold opacity-80">Ensambles Completados</p>
             </div>
             <div class="bg-blue-500 text-white p-6 rounded-3xl shadow-md">
-                <p id="stat-logros" class="text-3xl font-bold">0</p>
+                <p id="stat-logros" class="stat-val text-3xl font-bold">—</p>
                 <p class="text-xs uppercase tracking-widest font-bold opacity-80">Logros Desbloqueados</p>
             </div>
             <div class="bg-blue-500 text-white p-6 rounded-3xl shadow-md">
-                <p id="stat-tiempo" class="text-3xl font-bold">--</p>
-                <p class="text-xs uppercase tracking-widest font-bold opacity-80">Mejor Tiempo</p>
+                <p id="stat-puntos" class="stat-val text-3xl font-bold">—</p>
+                <p class="text-xs uppercase tracking-widest font-bold opacity-80">Puntos Acumulados</p>
             </div>
         </div>
     </div>
-<script>
-    const perfilData = JSON.parse(localStorage.getItem('perfilActivo'));
 
-    if (perfilData) {
-        document.querySelector('.font-bold.leading-none').textContent = perfilData.nombre;
-        document.querySelector('.text-xs.text-blue-200').textContent = ` ${perfilData.puntos || 0} puntos`;
+    <script>
+        const usuarioGuardado = localStorage.getItem('arquikids_usuario');
+        if (!usuarioGuardado) {
+            window.location.href = 'perfil.html';
+        } else {
+            const usuario = JSON.parse(usuarioGuardado);
 
-        if (perfilData.avatar) {
-            document.querySelector('.bg-blue-600 img').src = perfilData.avatar;
+            // Mostrar datos locales inmediatamente
+            document.getElementById('user-name').textContent = usuario.nickname;
+            document.getElementById('user-points').textContent = `⭐ ${usuario.puntosAcumulados} puntos`;
+            document.getElementById('user-avatar').src = usuario.avatar || 'https://img.icons8.com/bubbles/100/000000/robot.png';
+
+            // Cargar datos frescos del servidor
+            Promise.all([
+                fetch(`/api/usuarios/${usuario.id_usuario}`).then(r => r.ok ? r.json() : null),
+                fetch(`/api/usuarios/${usuario.id_usuario}/stats`).then(r => r.ok ? r.json() : null)
+            ]).then(([u, stats]) => {
+                if (u) {
+                    localStorage.setItem('arquikids_usuario', JSON.stringify(u));
+                    document.getElementById('user-name').textContent = u.nickname;
+                    document.getElementById('user-points').textContent = `⭐ ${u.puntosAcumulados} puntos`;
+                    if (u.avatar) document.getElementById('user-avatar').src = u.avatar;
+                }
+                if (stats) {
+                    document.getElementById('stat-ensambles').textContent = stats.ensambles;
+                    document.getElementById('stat-logros').textContent = stats.logros;
+                    document.getElementById('stat-puntos').textContent = stats.puntos;
+                }
+            }).catch(() => {
+                // Mostrar datos locales si falla la API
+                document.getElementById('stat-puntos').textContent = usuario.puntosAcumulados;
+                document.getElementById('stat-ensambles').textContent = '0';
+                document.getElementById('stat-logros').textContent = '0';
+            });
         }
-
-        document.getElementById('stat-ensambles').textContent = perfilData.ensambles || 0;
-        document.getElementById('stat-logros').textContent    = perfilData.logros    || 0;
-        document.getElementById('stat-tiempo').textContent    = perfilData.mejorTiempo || '--';
-    } else {
-        window.location.href = "perfil.html";
-    }
-</script>
+    </script>
 </body>
 </html>
