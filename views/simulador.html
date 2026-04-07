@@ -287,6 +287,8 @@
     let tiempoSegundos = 0;
     let cronometroInterval = null;
 
+    const sonidoExito = new Audio('/assets/audio/sonidoCorrecto.mp3');
+
     function iniciarCronometro() {
         cronometroInterval = setInterval(() => {
             tiempoSegundos++;
@@ -693,6 +695,8 @@
         if (SOLO_BOTON.has(componentePendiente) && !colocadosOk.has(componentePendiente)) {
             colocadosOk.add(componentePendiente);
             puntos += 100;
+            sonidoExito.currentTime = 0; 
+            sonidoExito.play().catch(e => console.log(e));
             const badge = document.getElementById('badge-puntos');
             badge.style.transform = 'scale(1.35)';
             setTimeout(() => { badge.style.transform = 'scale(1)'; }, 300);
@@ -735,6 +739,8 @@
         if (correcto && !colocadosOk.has(clave)) {
             colocadosOk.add(clave);
             puntos += 100;
+            sonidoExito.currentTime = 0; 
+            sonidoExito.play().catch(e => console.log(e));
             const badge = document.getElementById('badge-puntos');
             badge.style.transform = 'scale(1.35)';
             setTimeout(() => { badge.style.transform = 'scale(1)'; }, 300);
@@ -749,15 +755,16 @@
     // ── Init Three.js ─────────────────────────────────────────────────
     function init3D() {
         scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x1a1a1a);
+        scene.background = new THREE.Color(0x1e293b);
         camera = new THREE.PerspectiveCamera(50, container.clientWidth / container.clientHeight, 0.1, 1000);
-        camera.position.set(0, 20, 40);
+        camera.position.set(0, 250, 285);
         renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(container.clientWidth, container.clientHeight);
         renderer.outputEncoding = THREE.sRGBEncoding;
         container.appendChild(renderer.domElement);
         orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
         orbitControls.enableDamping = true;
+        orbitControls.maxDistance = 450;
         scene.add(new THREE.AmbientLight(0xffffff, 0.8));
         const light = new THREE.DirectionalLight(0xffffff, 1);
         light.position.set(5, 10, 5);
