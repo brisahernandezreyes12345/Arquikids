@@ -207,7 +207,7 @@
         ram:          { x: 67.217,  y: 21.323, z: -39.215,  tolerancia: 8 },
         gpu:          { x: -2.188,  y: 27.696, z: 58.684,   tolerancia: 8 },
         disco_duro:   { x: 3.334,   y: 7.959,  z: -86.261,  tolerancia: 8 },
-        psu:          { x: 84.159,  y: 59.328, z: -91.745,  tolerancia: 25 },
+        psu:          { x: -42.224,  y: 30.270, z: -4.390,  tolerancia: 25 },
         refrigeracion:{ x: 14.508,  y: 20.0,   z: -38.441,  tolerancia: 30 },
         monitor:      null,
         mouse:        null,
@@ -239,6 +239,42 @@
     let grupoNombre    = new Map();
     let grupoClave     = new Map();
     let componentePendiente = null;
+
+    // ── Marcadores de zona amarilla ───────────────────────────────────
+    const zonaMarcadores = new Map(); // clave → mesh esfera amarilla
+    let _pulsDir = 1, _pulsVal = 0;
+
+    function crearMarcadoresZona() {
+        Object.entries(ZONAS).forEach(([clave, zona]) => {
+            if (!zona) return;
+            const geo  = new THREE.SphereGeometry(zona.tolerancia * 0.6, 24, 24);
+            const mat  = new THREE.MeshStandardMaterial({
+                color: 0xfacc15, emissive: 0xfacc15, emissiveIntensity: 0.6,
+                transparent: true, opacity: 0.38, depthWrite: false
+            });
+            const mesh = new THREE.Mesh(geo, mat);
+            mesh.position.set(zona.x, zona.y, zona.z);
+            mesh.visible = false;
+            scene.add(mesh);
+            zonaMarcadores.set(clave, mesh);
+        });
+    }
+
+    function pulsarMarcadores() {
+        _pulsVal += 0.03 * _pulsDir;
+        if (_pulsVal >= 1) { _pulsVal = 1; _pulsDir = -1; }
+        if (_pulsVal <= 0) { _pulsVal = 0; _pulsDir =  1; }
+        zonaMarcadores.forEach(mesh => {
+            if (!mesh.visible) return;
+            mesh.material.opacity      = 0.22 + _pulsVal * 0.28;
+            mesh.material.emissiveIntensity = 0.4 + _pulsVal * 0.6;
+        });
+    }
+
+    function ocultarMarcador(clave) {
+        const m = zonaMarcadores.get(clave);
+        if (m) m.visible = false;
+    }
     const container = document.getElementById('canvas-3d');
 
     // ── Estado de usuario / sesión ────────────────────────────────────
@@ -402,7 +438,7 @@
             });
         }
 
-        if (avance.colocados) avance.colocados.forEach(k => colocadosOk.add(k));
+        if (avance.colocados) avance.colocados.forEach(k => { colocadosOk.add(k); ocultarMarcador(k); });
         actualizarUI();
         return avance.piezas && avance.piezas.length > 0;
     }
@@ -777,6 +813,11 @@
         if (!selectedGroup) return;
         ultimoSeleccionado = selectedGroup;
         restaurarMaterial(selectedGroup);
+        // Mostrar solo el marcador de la pieza seleccionada
+        const claveSeleccionada = grupoClave.get(selectedGroup);
+        zonaMarcadores.forEach((mesh, clave) => {
+            mesh.visible = (clave === claveSeleccionada) && !colocadosOk.has(clave);
+        });
         isDragging = true;
         orbitControls.enabled = false;
         renderer.domElement.style.cursor = 'grabbing';
@@ -816,17 +857,21 @@
         selectedGroup = null;
         orbitControls.enabled = true;
         renderer.domElement.style.cursor = 'grab';
+        // Ocultar todos los marcadores al soltar
+        zonaMarcadores.forEach(mesh => { mesh.visible = false; });
     }
 
     function animate() {
         requestAnimationFrame(animate);
         if (orbitControls) orbitControls.update();
+        pulsarMarcadores();
         if (renderer && scene && camera) renderer.render(scene, camera);
     }
 
     // ── Arranque ──────────────────────────────────────────────────────
     window.addEventListener('load', async () => {
         init3D();
+        crearMarcadoresZona();
         const ok = await cargarUsuario();
         if (!ok) return;
         actualizarUI();
