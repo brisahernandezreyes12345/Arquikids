@@ -214,14 +214,14 @@
     };
 
     const COMPONENTES = {
-        cpu:          { nombre:'Procesador (CPU)',      emoji:'🧠', imagen:'/assets/img/cpu.png',          desc:'Es el cerebro de la computadora. Procesa todas las instrucciones del sistema.',           fun:'💡 ¡Un procesador moderno puede hacer billones de operaciones por segundo!', modelo:'/assets/models/cpu.glb',          escala:0.05,  posInicial:{x:0,y:20,z:0} },
-        ram:          { nombre:'Memoria RAM',           emoji:'💾', imagen:'/assets/img/ram.png',        desc:'Guarda temporalmente los programas abiertos para que el procesador los use rápido.',      fun:'💡 RAM significa "Random Access Memory" o Memoria de Acceso Aleatorio.',     modelo:'/assets/models/ram.glb',          escala:930,   posInicial:{x:0,y:20,z:0} },
-        gpu:          { nombre:'Tarjeta Gráfica (GPU)', emoji:'🎮', imagen:'/assets/img/gpu.png',        desc:'Procesa y muestra las imágenes en pantalla. Clave para videojuegos y diseño.',            fun:'💡 Las GPU también se usan para entrenar inteligencia artificial.',           modelo:'/assets/models/gpu.glb',          escala:0.35,  posInicial:{x:0,y:20,z:0} },
-        disco_duro:   { nombre:'Disco Duro',            emoji:'💿', imagen:'/assets/img/disco_duro.png', desc:'Guarda todos tus archivos y el sistema operativo de forma permanente.',                    fun:'💡 Los SSD son mucho más rápidos que los discos tradicionales.',              modelo:'/assets/models/disco_duro.glb',   escala:0.7,   posInicial:{x:0,y:20,z:0} },
-        psu:          { nombre:'Fuente de Poder (PSU)', emoji:'⚡', imagen:'/assets/img/psu.png',        desc:'Convierte la electricidad de la pared en energía para todos los componentes.',            fun:'💡 Una buena fuente puede hacer que tu PC dure muchos más años.',            modelo:'/assets/models/psu.glb',          escala:3,     posInicial:{x:0,y:20,z:0} },
-        refrigeracion:{ nombre:'Refrigeración',         emoji:'❄️', imagen:'/assets/img/refrigeracion.png', desc:'Mantiene fríos al procesador y componentes para que no se dañen por el calor.',        fun:'💡 Algunos gamers usan refrigeración con agua para enfriar sus PCs.',        modelo:'/assets/models/refrigeracion.glb', escala:20,   posInicial:{x:0,y:20,z:0} },
-        monitor:      { nombre:'Monitor',               emoji:'🖥️', imagen:'/assets/img/monitor.png',    desc:'La pantalla donde ves todo lo que hace la computadora.',                                  fun:'💡 Los monitores gaming muestran hasta 360 imágenes por segundo.',           modelo:'/assets/models/monitor.glb',      escala:8,     posInicial:{x:0,y:20,z:0} },
-        mouse:        { nombre:'Mouse',                 emoji:'🖱️', imagen:'/assets/img/mouse.png',      desc:'Dispositivo para mover el cursor y hacer clic. Una de las formas de controlar la PC.', fun:'💡 El primer mouse fue inventado en 1964 y era de madera.',                  modelo:'/assets/models/mouse.glb',        escala:10,    posInicial:{x:0,y:0,z:0} },
+        cpu:          { nombre:'Procesador (CPU)',      emoji:'', imagen:'/assets/img/cpu.png',          desc:'Es el cerebro de la computadora. Procesa todas las instrucciones del sistema.',           fun:' ¡Un procesador moderno puede hacer billones de operaciones por segundo!', modelo:'/assets/models/cpu.glb',          escala:0.05,  posInicial:{x:0,y:20,z:0} },
+        ram:          { nombre:'Memoria RAM',           emoji:'', imagen:'/assets/img/ram.png',        desc:'Guarda temporalmente los programas abiertos para que el procesador los use rápido.',      fun:' RAM significa "Random Access Memory" o Memoria de Acceso Aleatorio.',     modelo:'/assets/models/ram.glb',          escala:930,   posInicial:{x:0,y:20,z:0} },
+        gpu:          { nombre:'Tarjeta Gráfica (GPU)', emoji:'', imagen:'/assets/img/gpu.png',        desc:'Procesa y muestra las imágenes en pantalla. Clave para videojuegos y diseño.',            fun:' Las GPU también se usan para entrenar inteligencia artificial.',           modelo:'/assets/models/gpu.glb',          escala:0.35,  posInicial:{x:0,y:20,z:0} },
+        disco_duro:   { nombre:'Disco Duro',            emoji:'', imagen:'/assets/img/disco_duro.png', desc:'Guarda todos tus archivos y el sistema operativo de forma permanente.',                    fun:' Los SSD son mucho más rápidos que los discos tradicionales.',              modelo:'/assets/models/disco_duro.glb',   escala:0.7,   posInicial:{x:0,y:20,z:0} },
+        psu:          { nombre:'Fuente de Poder (PSU)', emoji:'', imagen:'/assets/img/psu.png',        desc:'Convierte la electricidad de la pared en energía para todos los componentes.',            fun:' Una buena fuente puede hacer que tu PC dure muchos más años.',            modelo:'/assets/models/psu.glb',          escala:3,     posInicial:{x:0,y:20,z:0} },
+        refrigeracion:{ nombre:'Refrigeración',         emoji:'', imagen:'/assets/img/refrigeracion.png', desc:'Mantiene fríos al procesador y componentes para que no se dañen por el calor.',        fun:' Algunos gamers usan refrigeración con agua para enfriar sus PCs.',        modelo:'/assets/models/refrigeracion.glb', escala:20,   posInicial:{x:0,y:20,z:0} },
+        monitor:      { nombre:'Monitor',               emoji:'', imagen:'/assets/img/monitor.png',    desc:'La pantalla donde ves todo lo que hace la computadora.',                                  fun:' Los monitores gaming muestran hasta 360 imágenes por segundo.',           modelo:'/assets/models/monitor.glb',      escala:8,     posInicial:{x:0,y:20,z:0} },
+        mouse:        { nombre:'Mouse',                 emoji:'', imagen:'/assets/img/mouse.png',      desc:'Dispositivo para mover el cursor y hacer clic. Una de las formas de controlar la PC.', fun:' El primer mouse fue inventado en 1964 y era de madera.',                  modelo:'/assets/models/mouse.glb',        escala:10,    posInicial:{x:0,y:0,z:0} },
     };
 
     // ── Estado Three.js ───────────────────────────────────────────────
@@ -337,7 +337,7 @@
         const raw = localStorage.getItem('arquikids_usuario');
         if (!raw) {
             // Sin usuario: redirigir al perfil
-            alert('⚠️ No hay un perfil activo. Por favor selecciona o crea un perfil primero.');
+            alert(' No hay un perfil activo. Por favor selecciona o crea un perfil primero.');
             window.location.href = 'perfil.html';
             return false;
         }
@@ -372,7 +372,7 @@
 
     // ── Guardar avance (localStorage como caché local) ───────────────
     function guardarAvance() {
-        if (!usuarioActivo) { alert('⚠️ No hay perfil activo.'); return; }
+        if (!usuarioActivo) { alert(' No hay perfil activo.'); return; }
 
         const piezasGuardadas = [];
         grupos.forEach(g => {
@@ -393,7 +393,7 @@
         const btn = document.querySelector('[onclick="guardarAvance()"]');
         if (btn) {
             const orig = btn.innerHTML;
-            btn.innerHTML = '✅ ¡Guardado!';
+            btn.innerHTML = ' ¡Guardado!';
             btn.disabled = true;
             setTimeout(() => { btn.innerHTML = orig; btn.disabled = false; }, 1800);
         }
@@ -532,9 +532,9 @@
             document.getElementById('paso-desc').innerHTML =
                 'Coloca el <strong>' + c.nombre + ' ' + c.emoji + '</strong> en su lugar correcto de la placa base. ¡Arrástralo y encájalo!';
         } else {
-            document.getElementById('paso-num').textContent   = '🏆';
+            document.getElementById('paso-num').textContent   = '';
             document.getElementById('paso-titulo').textContent = '¡Todo listo!';
-            document.getElementById('paso-desc').innerHTML    = '¡Felicidades! Ensamblaste todos los componentes correctamente. <strong>¡Eres un pro! 🎉</strong>';
+            document.getElementById('paso-desc').innerHTML    = '¡Felicidades! Ensamblaste todos los componentes correctamente. <strong>¡Eres un pro! </strong>';
             if (!window._felizMostrado) {
                 window._felizMostrado = true;
                 detenerCronometro();
@@ -552,9 +552,9 @@
     // ── Quiz ─────────────────────────────────────────────────────────
     // Preguntas base (fallback estático); se reemplazarán con las de la BD si hay conexión
     let PREGUNTAS = [
-        { pregunta: '¿Cuál es el componente conocido como el "cerebro" de la computadora?', opciones: ['Memoria RAM 💾', 'Procesador (CPU) 🧠', 'Tarjeta Gráfica 🎮', 'Fuente de Poder ⚡'], correcta: 1 },
+        { pregunta: '¿Cuál es el componente conocido como el "cerebro" de la computadora?', opciones: ['Memoria RAM ', 'Procesador (CPU) ', 'Tarjeta Gráfica ', 'Fuente de Poder '], correcta: 1 },
         { pregunta: '¿Qué hace la Memoria RAM?', opciones: ['Guarda archivos permanentemente', 'Convierte electricidad en energía', 'Guarda temporalmente los programas abiertos', 'Muestra imágenes en pantalla'], correcta: 2 },
-        { pregunta: '¿Qué componente convierte la electricidad de la pared en energía para la PC?', opciones: ['Tarjeta Gráfica', 'Disco Duro 💿', 'Refrigeración ❄️', 'Fuente de Poder ⚡'], correcta: 3 },
+        { pregunta: '¿Qué componente convierte la electricidad de la pared en energía para la PC?', opciones: ['Tarjeta Gráfica', 'Disco Duro ', 'Refrigeración ', 'Fuente de Poder '], correcta: 3 },
         { pregunta: '¿Cuál componente guarda todos tus archivos y el sistema operativo de forma permanente?', opciones: ['Memoria RAM', 'Procesador (CPU)', 'Disco Duro', 'Monitor'], correcta: 2 },
         { pregunta: '¿Para qué sirve la Tarjeta Gráfica (GPU)?', opciones: ['Enfriar los componentes', 'Procesar y mostrar imágenes en pantalla', 'Guardar archivos', 'Conectar periféricos'], correcta: 1 },
     ];
@@ -621,16 +621,16 @@
         PREGUNTAS.forEach((p, i) => {
             const ok = respuestasUsuario[i] === p.correcta;
             if (ok) aciertos++;
-            detalle += `<div>${ok ? '✅' : '❌'} <strong>P${i+1}:</strong> ${ok ? 'Correcto' : 'Incorrecto — era: <em>' + p.opciones[p.correcta] + '</em>'}</div>`;
+            detalle += `<div>${ok ? '' : ''} <strong>P${i+1}:</strong> ${ok ? 'Correcto' : 'Incorrecto — era: <em>' + p.opciones[p.correcta] + '</em>'}</div>`;
         });
 
         const pct = Math.round((aciertos / PREGUNTAS.length) * 100);
         const puntosQuiz = aciertos * 20; // 20 pts por respuesta correcta
 
         let emoji, titulo, desc;
-        if (pct === 100)    { emoji='🏆'; titulo='¡Perfecto!';         desc='¡Respondiste todo correcto! Eres un experto en computadoras.'; }
-        else if (pct >= 60) { emoji='🌟'; titulo='¡Muy bien!';         desc=`${aciertos} de ${PREGUNTAS.length} correctas. ¡Casi eres un experto!`; }
-        else                { emoji='📚'; titulo='¡Sigue practicando!'; desc=`${aciertos} de ${PREGUNTAS.length} correctas. Repasa los componentes e inténtalo de nuevo.`; }
+        if (pct === 100)    { emoji=''; titulo='¡Perfecto!';         desc='¡Respondiste todo correcto! Eres un experto en computadoras.'; }
+        else if (pct >= 60) { emoji=''; titulo='¡Muy bien!';         desc=`${aciertos} de ${PREGUNTAS.length} correctas. ¡Casi eres un experto!`; }
+        else                { emoji=''; titulo='¡Sigue practicando!'; desc=`${aciertos} de ${PREGUNTAS.length} correctas. Repasa los componentes e inténtalo de nuevo.`; }
 
         document.getElementById('res-emoji').textContent   = emoji;
         document.getElementById('res-titulo').textContent  = titulo;
@@ -665,7 +665,7 @@
         if (SOLO_BOTON.has(clave)) {
             const previos = ORDEN_VALIDABLES.filter(k => !SOLO_BOTON.has(k));
             if (!previos.every(k => colocadosOk.has(k))) {
-                alert('⚠️ Primero coloca todos los demás componentes correctamente antes de agregar el ' + COMPONENTES[clave].nombre + '.');
+                alert(' Primero coloca todos los demás componentes correctamente antes de agregar el ' + COMPONENTES[clave].nombre + '.');
                 return;
             }
         }
