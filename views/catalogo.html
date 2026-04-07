@@ -10,30 +10,20 @@
         .card-shadow { box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1); }
         /* Estilo para el efecto de desenfoque al abrir el modal */
         .modal-active { overflow: hidden; }
+        /* Para evitar que el texto sea larguísimo en la tarjeta pequeña */
+        .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
     </style>
 </head>
 <body class="bg-slate-50 p-8">
     <div class="max-w-7xl mx-auto">
         <div class="text-center mb-10">
             <h2 class="text-5xl font-bold text-blue-700 mb-2">Catálogo de Componentes</h2>
-            <p class="text-blue-500 text-xl">¡Descubre todos los componentes de una computadora! </p>
-            <div class="inline-block bg-blue-600 text-white px-6 py-2 rounded-full mt-4 font-bold">Explorados: 0 / 12</div>
+            <p class="text-blue-500 text-xl">¡Descubre todos los componentes de una computadora!</p>
+            <div id="contador" class="inline-block bg-blue-600 text-white px-6 py-2 rounded-full mt-4 font-bold">Cargando...</div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div class="bg-white rounded-3xl p-5 border-2 border-blue-400 card-shadow">
-                <div class="relative mb-4">
-                    <img src="https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=300" class="rounded-2xl w-full h-40 object-cover">
-                    <span class="absolute bottom-2 right-2 text-2xl"></span>
-                </div>
-                <h3 class="text-blue-600 text-2xl font-bold text-center mb-2">Procesador</h3>
-                <p class="text-gray-500 text-sm text-center mb-4">¡Es el cerebro de la computadora! Piensa y toma decisiones.</p>
-                <div class="bg-blue-500 text-white p-2 rounded-xl text-xs flex items-center gap-2 mb-4">
-                    <span></span> Como el cerebro que piensa
-                </div>
-                <button onclick="openModal()" class="w-full bg-blue-600 text-white py-2 rounded-xl font-bold hover:bg-blue-700 transition-colors">ⓘ Ver Detalles</button>
+        <div id="grid-componentes" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             </div>
-        </div>
 
         <div class="text-center mt-12">
             <a href="index.html" class="text-blue-600 font-bold hover:underline">← Volver al Menú Principal</a>
@@ -43,53 +33,118 @@
     <div id="modalDetalles" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50 p-4">
         <div class="bg-white rounded-[2rem] max-w-md w-full p-6 relative overflow-hidden">
             
-            <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-2xl font-bold">&times;</button>
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-3xl font-bold">&times;</button>
 
             <div class="text-center mb-6">
-                <h2 class="text-emerald-500 text-4xl font-bold">Tarjeta Madre</h2>
-                <p class="text-gray-500 text-lg">Motherboard</p>
+                <h2 id="modal-titulo" class="text-emerald-500 text-3xl font-bold">Cargando...</h2>
             </div>
 
             <div class="bg-blue-600 rounded-3xl p-6 text-white text-center mb-4 shadow-lg">
-                <div class="text-3xl mb-2"></div>
-                <h4 class="text-xl font-bold mb-2">Como una ciudad donde viven todos los componentes</h4>
-                <p class="text-sm opacity-90">Es la pieza más grande que conecta a todas las demás. ¡Como una ciudad donde viven todos los habitantes de la computadora!</p>
+                <div class="text-3xl mb-2">💡</div>
+                <h4 class="text-xl font-bold mb-2">Analogía Cotidiana</h4>
+                <p id="modal-analogia" class="text-sm opacity-90">...</p>
             </div>
 
             <div class="bg-blue-50 border border-blue-100 rounded-2xl p-4 mb-3 flex flex-col items-start">
                 <div class="flex items-center gap-2 mb-1">
-                    <span class="text-purple-400 text-xl"></span>
-                    <span class="text-blue-700 font-bold text-lg">Función</span>
+                    <span class="text-purple-400 text-xl">⚙️</span>
+                    <span class="text-blue-700 font-bold text-lg">Función Real</span>
                 </div>
-                <p class="text-gray-600">Conecta y comunica todos los componentes de la computadora</p>
-            </div>
-
-            <div class="bg-blue-50 border border-blue-100 rounded-2xl p-4 flex flex-col items-start">
-                <div class="flex items-center gap-2 mb-1">
-                    <span class="text-yellow-400 text-xl"></span>
-                    <span class="text-blue-700 font-bold text-lg">Importancia</span>
-                </div>
-                <p class="text-gray-600">Es la base fundamental - sin ella nada funciona</p>
+                <p id="modal-funcion" class="text-gray-600">...</p>
             </div>
 
         </div>
     </div>
 
     <script>
-        const modal = document.getElementById('modalDetalles');
 
-        function openModal() {
+        let listaComponentes = [];
+
+        document.addEventListener('DOMContentLoaded', cargarComponentes);
+
+        async function cargarComponentes() {
+            try {
+
+                const baseUrl = window.location.protocol === 'file:'
+                    ? 'http://localhost:8000'
+                    : window.location.origin;
+                const respuesta = await fetch(`${baseUrl}/api/componentes`);
+                
+                if (!respuesta.ok) {
+                    throw new Error(`Error al conectar con la base de datos (${respuesta.status})`);
+                }
+
+                listaComponentes = await respuesta.json();
+
+                document.getElementById('contador').innerText = `Componentes en Catálogo: ${listaComponentes.length}`;
+
+                dibujarTarjetas();
+
+            } catch (error) {
+                console.error("Error:", error);
+                document.getElementById('grid-componentes').innerHTML = `
+                    <p class="text-red-500 col-span-4 text-center font-bold text-xl">
+                        ⚠️ No se pudo cargar la información. Asegúrate de que el Backend esté encendido.
+                    </p>`;
+                document.getElementById('contador').innerText = 'Error de conexión';
+            }
+        }
+
+        function dibujarTarjetas() {
+            const grid = document.getElementById('grid-componentes');
+            grid.innerHTML = ''; 
+
+            listaComponentes.forEach((componente, index) => {
+                
+                const nombreCorto = componente.nombreTecnico.split('(')[0].trim();
+
+                const tarjetaHTML = `
+                    <div class="bg-white rounded-3xl p-5 border-2 border-blue-400 card-shadow flex flex-col justify-between h-full">
+                        <div>
+                            <div class="relative mb-4 flex justify-center">
+                                <div class="w-full h-40 bg-blue-100 rounded-2xl flex items-center justify-center overflow-hidden">
+                                    <span class="text-5xl">💻</span>
+                                    </div>
+                            </div>
+                            
+                            <h3 class="text-blue-600 text-xl font-bold text-center mb-2 line-clamp-2" title="${componente.nombreTecnico}">${nombreCorto}</h3>
+                            <p class="text-gray-500 text-sm text-center mb-4 line-clamp-3">${componente.descripcionSencilla}</p>
+                        </div>
+                        
+                        <button onclick="openModal(${index})" class="w-full bg-blue-600 text-white py-2 rounded-xl font-bold hover:bg-blue-700 transition-colors mt-auto">
+                            ⓘ Ver Detalles
+                        </button>
+                    </div>
+                `;
+                grid.innerHTML += tarjetaHTML;
+            });
+        }
+
+        function openModal(index) {
+            // Buscamos el componente específico que clickeó el usuario
+            const compSeleccionado = listaComponentes[index];
+
+            // Inyectamos su información en el modal
+            document.getElementById('modal-titulo').innerText = compSeleccionado.nombreTecnico;
+            document.getElementById('modal-analogia').innerText = compSeleccionado.analogiaCotidiana;
+            document.getElementById('modal-funcion').innerText = compSeleccionado.descripcionSencilla;
+
+            // Mostramos el modal
+            const modal = document.getElementById('modalDetalles');
             modal.classList.remove('hidden');
+            modal.classList.add('flex'); 
             document.body.classList.add('modal-active');
         }
 
         function closeModal() {
+            const modal = document.getElementById('modalDetalles');
             modal.classList.add('hidden');
+            modal.classList.remove('flex');
             document.body.classList.remove('modal-active');
         }
 
-        // Cerrar el modal si se hace clic fuera de la caja blanca
         window.onclick = function(event) {
+            const modal = document.getElementById('modalDetalles');
             if (event.target == modal) {
                 closeModal();
             }
