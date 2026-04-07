@@ -92,19 +92,26 @@
 
         function dibujarTarjetas() {
             const grid = document.getElementById('grid-componentes');
-            grid.innerHTML = ''; 
+            grid.innerHTML = '';
 
             listaComponentes.forEach((componente, index) => {
-                
                 const nombreCorto = componente.nombreTecnico.split('(')[0].trim();
+
+                const nombreImagen = componente.modelo3D.replace('.glb', '.png');
+                const rutaImagen = `/assets/img/${nombreImagen}`;
 
                 const tarjetaHTML = `
                     <div class="bg-white rounded-3xl p-5 border-2 border-blue-400 card-shadow flex flex-col justify-between h-full">
                         <div>
                             <div class="relative mb-4 flex justify-center">
-                                <div class="w-full h-40 bg-blue-100 rounded-2xl flex items-center justify-center overflow-hidden">
-                                    <span class="text-5xl">💻</span>
-                                    </div>
+                                <div class="w-full h-40 bg-blue-50 rounded-2xl flex items-center justify-center overflow-hidden p-2">
+                                    
+                                    <img src="${rutaImagen}" 
+                                         alt="${nombreCorto}" 
+                                         class="object-contain w-full h-full drop-shadow-md hover:scale-110 transition-transform duration-300"
+                                         onerror="this.onerror=null; this.outerHTML='<span class=\\'text-5xl\\'>💻</span>';">
+                                         
+                                </div>
                             </div>
                             
                             <h3 class="text-blue-600 text-xl font-bold text-center mb-2 line-clamp-2" title="${componente.nombreTecnico}">${nombreCorto}</h3>
