@@ -65,9 +65,7 @@
         async function cargarComponentes() {
             try {
 
-                const baseUrl = window.location.protocol === 'file:'
-                    ? 'http://localhost:8000'
-                    : window.location.origin;
+                const baseUrl = window.location.origin;
                 const respuesta = await fetch(`${baseUrl}/api/componentes`);
                 
                 if (!respuesta.ok) {

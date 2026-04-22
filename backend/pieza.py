@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from typing import Optional
-from .database import get_db_connection
+from backend.database import get_db_connection
 
 router = APIRouter()
 
@@ -206,3 +206,4 @@ async def obtener_stats(id_usuario: int):
     if u is None:
         raise HTTPException(status_code=404, detail="Usuario no encontrado")
     return {"ensambles": ensambles, "logros": logros, "puntos": u['puntosAcumulados']}
+
