@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ArquiKids — Bienvenido</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .card {
+      background: white;
+      border-radius: 20px;
+      padding: 48px 40px;
+      width: 480px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+      text-align: center;
+    }
+    .logo { font-size: 64px; margin-bottom: 8px; }
+    h1 { color: #1a1a2e; font-size: 26px; margin-bottom: 6px; }
+    p.sub { color: #666; font-size: 14px; margin-bottom: 32px; }
+    label {
+      display: block; text-align: left; font-size: 13px;
+      font-weight: 600; color: #333; margin-bottom: 6px;
+    }
+    input {
+      width: 100%; padding: 12px 16px; border: 2px solid #e0e0e0;
+      border-radius: 10px; font-size: 15px; margin-bottom: 18px;
+      outline: none; transition: border-color .2s;
+    }
+    input:focus { border-color: #0f3460; }
+    .fila { display: flex; gap: 12px; }
+    .fila > div { flex: 1; }
+    .avatares {
+      display: flex; gap: 10px; justify-content: center;
+      margin-bottom: 24px; flex-wrap: wrap;
+    }
+    .avatar-btn {
+      width: 64px; height: 64px; border-radius: 50%;
+      border: 3px solid #e0e0e0;
+      cursor: pointer; background: #f5f5f5;
+      transition: all .2s;
+      padding: 4px;
+      overflow: hidden;
+    }
+    .avatar-btn img {
+      width: 100%; height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      pointer-events: none;
+    }
+    .avatar-btn:hover { border-color: #0f3460; background: #e8f0fe; transform: scale(1.1); }
+    .avatar-btn.selected {
+      border-color: #0f3460; background: #e8f0fe;
+      transform: scale(1.1);
+      box-shadow: 0 0 0 3px #0f346040;
+    }
+    button[type="submit"] {
+      width: 100%; padding: 14px;
+      background: linear-gradient(135deg, #0f3460, #533483);
+      color: white; border: none; border-radius: 12px;
+      font-size: 16px; font-weight: 700; cursor: pointer;
+      transition: opacity .2s; margin-top: 4px;
+    }
+    button[type="submit"]:hover { opacity: .9; }
+    #error { color: #e53935; font-size: 13px; margin-top: 12px; display: none; }
+    #exito { color: #43a047; font-size: 14px; margin-top: 12px; display: none; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo">🖥️</div>
+    <h1>¡Bienvenido a ArquiKids!</h1>
+    <p class="sub">Crea tu perfil para comenzar a aprender</p>
+
+    <div class="fila">
+      <div>
+        <label for="nombre">Nombre *</label>
+        <input type="text" id="nombre" placeholder="Ej: Carlos" maxlength="40" />
+      </div>
+      <div>
+        <label for="apellidos">Apellidos *</label>
+        <input type="text" id="apellidos" placeholder="Ej: López Cruz" maxlength="60" />
+      </div>
+    </div>
+
+    <label for="correo">Correo electrónico *</label>
+    <input type="email" id="correo" placeholder="tucorreo@ejemplo.com" />
+
+    <label for="fecha">Fecha de nacimiento *</label>
+    <input type="date" id="fecha" />
+
+    <label>Elige tu avatar *</label>
+    <div class="avatares" id="contenedor-avatares"></div>
+
+    <button type="submit" onclick="registrar()">¡Empezar a jugar! 🎉</button>
+    <div id="error">⚠️ <span id="error-msg"></span></div>
+    <div id="exito">✅ ¡Perfil creado! Entrando al juego...</div>
+  </div>
+
+  <script>
+    const AVATARES = [
+      '/static/img/ardilla.png',
+      '/static/img/buho.png',
+      '/static/img/conejo.png',
+      '/static/img/lobo.png',
+      '/static/img/mapache.png',
+      '/static/img/puerco.png',
+      '/static/img/rata.png',
+      '/static/img/zorrillo.png'
+    ];
+
+    let avatarSeleccionado = AVATARES[0];
+
+    // Generar botones de avatar dinámicamente
+    const contenedor = document.getElementById('contenedor-avatares');
+    AVATARES.forEach((src, i) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'avatar-btn' + (i === 0 ? ' selected' : '');
+      btn.dataset.avatar = src;
+      btn.onclick = () => seleccionarAvatar(btn);
+      const img = document.createElement('img');
+      img.src = src;
+      img.alt = src.split('/').pop().replace('.png', '');
+      btn.appendChild(img);
+      contenedor.appendChild(btn);
+    });
+
+    document.getElementById('fecha').max = new Date().toISOString().split('T')[0];
+
+    function seleccionarAvatar(btn) {
+      document.querySelectorAll('.avatar-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      avatarSeleccionado = btn.dataset.avatar;
+    }
+
+    async function registrar() {
+      const nombre    = document.getElementById('nombre').value.trim();
+      const apellidos = document.getElementById('apellidos').value.trim();
+      const correo    = document.getElementById('correo').value.trim();
+      const fecha     = document.getElementById('fecha').value;
+      const errorDiv  = document.getElementById('error');
+      const errorMsg  = document.getElementById('error-msg');
+      const exitoDiv  = document.getElementById('exito');
+
+      errorDiv.style.display = 'none';
+
+      if (!nombre || !apellidos || !correo || !fecha) {
+        errorMsg.textContent = 'Todos los campos son obligatorios.';
+        errorDiv.style.display = 'block';
+        return;
+      }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)) {
+        errorMsg.textContent = 'Ingresa un correo electrónico válido.';
+        errorDiv.style.display = 'block';
+        return;
+      }
+
+      const nickname = `${nombre} ${apellidos}`;
+
+      try {
+        const res = await fetch('/api/usuarios', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ nickname, avatar: avatarSeleccionado })
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          localStorage.setItem('arquikids_usuario', JSON.stringify({
+            ...data, nombre, apellidos, correo, fecha, avatar: avatarSeleccionado
+          }));
+          exitoDiv.style.display = 'block';
+          setTimeout(() => { window.location.href = '/static/index.html'; }, 1500);
+        } else {
+          const err = await res.json();
+          errorMsg.textContent = err.detail || 'Ese nombre ya está registrado. Intenta con otro.';
+          errorDiv.style.display = 'block';
+        }
+      } catch (e) {
+        errorMsg.textContent = 'Error de conexión con el servidor.';
+        errorDiv.style.display = 'block';
+      }
+    }
+  </script>
+</body>
+</html>
