@@ -5,8 +5,9 @@ import time
 import os
 import sys
 import sqlite3
+import json
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse, HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
@@ -25,7 +26,8 @@ def get_app_dir():
         return os.path.dirname(sys.executable)
     return os.path.dirname(os.path.abspath(__file__))
 
-DB_PATH = os.path.join(get_app_dir(), "database", "arquikids.db")
+DB_PATH     = os.path.join(get_app_dir(), "database", "arquikids.db")
+CONFIG_PATH = os.path.join(get_app_dir(), "config.json")
 
 def inicializar_si_necesario():
     if not os.path.exists(DB_PATH):
@@ -38,13 +40,7 @@ def inicializar_si_necesario():
         conn.close()
 
 def es_primera_ejecucion():
-    try:
-        conn = sqlite3.connect(DB_PATH)
-        count = conn.execute("SELECT COUNT(*) FROM Usuario WHERE id_usuario > 1").fetchone()[0]
-        conn.close()
-        return count == 0
-    except Exception:
-        return True
+    return not os.path.exists(CONFIG_PATH)
 
 app = FastAPI()
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_credentials=True,
@@ -65,6 +61,13 @@ def formulario_bienvenida():
     with open(html_path, "r", encoding="utf-8") as f:
         return HTMLResponse(content=f.read())
 
+@app.post("/api/guardar-config")
+async def guardar_config(request: Request):
+    datos = await request.json()
+    with open(CONFIG_PATH, "w", encoding="utf-8") as f:
+        json.dump(datos, f, ensure_ascii=False)
+    return {"ok": True}
+
 def abrir_navegador():
     time.sleep(1.5)
     webbrowser.open("http://127.0.0.1:8000")
@@ -76,15 +79,13 @@ if __name__ == "__main__":
     inicializar_si_necesario()
     threading.Thread(target=abrir_navegador, daemon=True).start()
 
-    # Servidor en hilo separado
     threading.Thread(
         target=lambda: uvicorn.run(app, host="127.0.0.1", port=8000, reload=False, log_config=None),
         daemon=True
     ).start()
 
-    # Ventana tkinter oculta (solo para mantener el proceso vivo)
     root = tk.Tk()
-    root.withdraw()  # <- completamente invisible
+    root.withdraw()
 
     def cerrar_app():
         if messagebox.askokcancel("ArquiKids", "¿Cerrar ArquiKids?", parent=root):
@@ -94,7 +95,6 @@ if __name__ == "__main__":
     def abrir_app():
         webbrowser.open("http://127.0.0.1:8000")
 
-    # Ícono en system tray con pystray
     try:
         import pystray
         from PIL import Image, ImageDraw
@@ -115,7 +115,6 @@ if __name__ == "__main__":
         threading.Thread(target=icono.run, daemon=True).start()
 
     except Exception:
-        # Si pystray falla, la app sigue corriendo igual (solo sin ícono)
         pass
 
     root.mainloop()
